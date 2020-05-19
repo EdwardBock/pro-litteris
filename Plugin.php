@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: Pro Service
- * Description: Get Pro Service Snippets.
+ * Plugin Name: ProLitteris
+ * Description: Integration of prolitteris.ch services.
  * Version: 1.1.0
  * Author: Palasthotel <rezeption@palasthotel.de> (Edward Bock)
  * Author URI: https://palasthotel.de
@@ -33,6 +33,7 @@ class Plugin {
 
 	const FILTER_POST_AUTHORS = "pro_litteris_post_authors";
 	const FILTER_POST_TYPES = "pro_litteris_post_types";
+	const FILTER_RENDER_PIXEL= "pro_litteris_render_pixel";
 
 	/**
 	 * constants

@@ -58,7 +58,8 @@ class Post {
 			Plugin::FILTER_POST_AUTHORS,
 			[
 				get_post_field('post_author', $post_id)
-			]
+			],
+            $post_id
 		);
 
 		$participants = array();

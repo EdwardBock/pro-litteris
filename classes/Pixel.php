@@ -60,6 +60,10 @@ class Pixel {
 			return $content;
 		}
 
+		if(!apply_filters(Plugin::FILTER_RENDER_PIXEL, true)){
+		    return $content;
+        }
+
 		$snippet = Service::getSnippet( get_the_ID() );
 
 		// if is error, skip
@@ -80,6 +84,10 @@ class Pixel {
 		if(!$this->isEnabled(get_post_type())){
 			return;
 		}
+
+        if(!apply_filters(Plugin::FILTER_RENDER_PIXEL, true)){
+            return;
+        }
 
 		$snippet = Service::getSnippet( get_the_ID() );
 
