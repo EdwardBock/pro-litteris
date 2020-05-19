@@ -253,7 +253,7 @@ class MetaBox {
 		$post_type = get_post_type( $post_id );
 
 		// Wee need to do this only for few post types
-		if ( ! in_array( $post_type, Plugin::POST_TYPES ) ) {
+		if ( ! $this->plugin->pixel->isEnabled($post_type)) {
 			return;
 		}
 
