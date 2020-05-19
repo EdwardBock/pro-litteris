@@ -90,10 +90,10 @@ class Service {
 	 */
 	public static function request($path, $body){
 		if( !defined('PH_PRO_LITTERIS_CREDENTIALS') )
-			return new \WP_Error(Plugin::ERROR_CODE_CONFIG, "Missing Pro Service credentials");
+			return new \WP_Error(Plugin::ERROR_CODE_CONFIG, "Missing ProLitteris credentials");
 
 		if( !defined('PH_PRO_LITTERIS_SYSTEM') )
-			return new \WP_Error(Plugin::ERROR_CODE_CONFIG,"Missing Pro Service system url");
+			return new \WP_Error(Plugin::ERROR_CODE_CONFIG,"Missing ProLitteris system url");
 
 		$headers = array(
 			"Content-Type"  => "application/json; charset=utf-8",

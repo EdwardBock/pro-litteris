@@ -260,6 +260,6 @@ class CLI {
 	"pro-litteris",
 	__NAMESPACE__."\CLI",
 	array(
-		'shortdesc' => 'Pro Service commands.',
+		'shortdesc' => 'ProLitteris commands.',
 	)
 );

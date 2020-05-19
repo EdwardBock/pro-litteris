@@ -44,7 +44,7 @@ class PostsTable {
 		if($column == 'pro-litteris'){
 
 			if($this->plugin->post->isReported($post_id)){
-				echo "<span title='Inhalt wurde bei Pro Service gemeldet' style='cursor: help;'>✅</span>";
+				echo "<span title='Inhalt wurde bei ProLitteris gemeldet' style='cursor: help;'>✅</span>";
 				return;
 			}
 
@@ -60,11 +60,11 @@ class PostsTable {
 				echo "<span title='$error' style='cursor: help;'>🔴</span>";
 				return;
 			} else if( $db_value !== false && ! empty( $db_value ) ) {
-				echo "<span title='Inhalt ist bereit für die Meldung bei Pro Service' style='cursor: help;'>🔶</span>";
+				echo "<span title='Inhalt ist bereit für die Meldung bei ProLitteris' style='cursor: help;'>🔶</span>";
 				return;
 			}
 
-			echo "<span title='Noch kein Zählpixel bei Pro Service abgeholt' style='cursor: help;'>🔵</span>";
+			echo "<span title='Noch kein Zählpixel bei ProLitteris abgeholt' style='cursor: help;'>🔵</span>";
 		}
 	}
 }

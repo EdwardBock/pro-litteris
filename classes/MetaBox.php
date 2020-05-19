@@ -37,7 +37,7 @@ class MetaBox {
 	 */
 	public function add_meta_boxes( $post_type, $post ) {
 
-		$title = __( 'Pro Service', Plugin::DOMAIN );
+		$title = __( 'ProLitteris', Plugin::DOMAIN );
 		foreach ( $this->plugin->pixel->enabledPostTypes() as $screen ) {
 			add_meta_box(
 				'pro_litteris',
@@ -192,7 +192,7 @@ class MetaBox {
 				echo "<p>";
 				echo "Vorname: $firstName<br/>";
 				echo "Nachname: $surName<br/>";
-				echo "Pro Service ID: $proLitterisId<br/>";
+				echo "ProLitteris ID: $proLitterisId<br/>";
 				echo "System ID: $systemId<br />";
 				echo "Aufgabe: $participation";
 				echo "</p>";
