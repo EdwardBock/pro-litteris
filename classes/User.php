@@ -34,6 +34,8 @@ class User {
 	}
 
 	public function profile_fields($user){
+
+		if(!user_can($user, "edit_posts")) return;
 		$keyId = Plugin::USER_META_PRO_LITTERIS_ID;
 		$keyName = Plugin::USER_META_PRO_LITTERIS_NAME;
 		$keySurname = Plugin::USER_META_PRO_LITTERIS_SURNAME;
@@ -86,18 +88,20 @@ class User {
 	}
 
 	public function save($user_id){
-		
+
 		if ( !current_user_can( 'edit_user', $user_id ) )
 			return;
 
 		if(isset($_POST[Plugin::USER_META_PRO_LITTERIS_ID]) && !empty($_POST[Plugin::USER_META_PRO_LITTERIS_ID])){
 			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_ID, intval($_POST[Plugin::USER_META_PRO_LITTERIS_ID]) );
+			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_NAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_NAME]) );
+			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_SURNAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_SURNAME]) );
 		} else {
 			delete_user_meta($user_id, Plugin::USER_META_PRO_LITTERIS_ID );
+			delete_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_NAME);
+			delete_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_SURNAME);
 		}
 
-		update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_NAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_NAME]) );
-		update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_SURNAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_SURNAME]) );
 	}
 
 
