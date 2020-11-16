@@ -234,7 +234,7 @@ class MetaBox {
 		}
 
 		echo "<p>Bisher wurde keine Pro-Service Zählpixel gespeichert. Bitte den Beitrag einmal speichern und die Seite neu laden um " .
-		     "einen Zählpixel zu generieren.";
+			 "einen Zählpixel zu generieren.</p>";
 	}
 
 	/**

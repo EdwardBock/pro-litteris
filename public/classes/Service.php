@@ -4,6 +4,8 @@
 namespace Palasthotel\ProLitteris;
 
 
+use WP_Error;
+
 class Service {
 
 
@@ -41,11 +43,11 @@ class Service {
 	/**
 	 * @param int $post_id
 	 *
-	 * @return string|\WP_Error
+	 * @return string|WP_Error
 	 */
 	public static function getSnippet($post_id){
 		$error = get_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_ERROR, true);
-		if($error instanceof \WP_Error) return $error;
+		if($error instanceof WP_Error) return $error;
 
 		return get_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS, true );
 	}
@@ -61,7 +63,7 @@ class Service {
 
 	/**
 	 * @param int $post_id
-	 * @param \WP_Error $error
+	 * @param WP_Error $error
 	 */
 	public static function saveError($post_id, $error){
 		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_ERROR, $error);
@@ -70,11 +72,11 @@ class Service {
 	/**
 	 * @param int $post_id
 	 *
-	 * @return string|\WP_Error
+	 * @return string|WP_Error
 	 */
 	public static function fetchAndSave($post_id){
 		$response = self::fetch($post_id);
-		if($response instanceof \WP_Error){
+		if($response instanceof WP_Error){
 			self::saveError($post_id, $response);
 		} else {
 			self::saveSnippet($post_id, $response);
@@ -86,14 +88,14 @@ class Service {
 	 * @param string $path
 	 * @param array $body
 	 *
-	 * @return string|\WP_Error
+	 * @return string|WP_Error
 	 */
 	public static function request($path, $body){
 		if( !defined('PH_PRO_LITTERIS_CREDENTIALS') )
-			return new \WP_Error(Plugin::ERROR_CODE_CONFIG, "Missing ProLitteris credentials");
+			return new WP_Error(Plugin::ERROR_CODE_CONFIG, "Missing ProLitteris credentials");
 
 		if( !defined('PH_PRO_LITTERIS_SYSTEM') )
-			return new \WP_Error(Plugin::ERROR_CODE_CONFIG,"Missing ProLitteris system url");
+			return new WP_Error(Plugin::ERROR_CODE_CONFIG,"Missing ProLitteris system url");
 
 		$headers = array(
 			"Content-Type"  => "application/json; charset=utf-8",
@@ -103,14 +105,14 @@ class Service {
 		$args = array(
 			"headers" => $headers,
 			"body"    => json_encode( $body ),
-			"timeout" => 30,
+			"timeout" => 4,
 			"sslverify" => false,
 		);
 		$response = wp_remote_post(
 			PH_PRO_LITTERIS_SYSTEM.$path,
 			$args
 		);
-		if($response instanceof \WP_Error){
+		if($response instanceof WP_Error){
 			return $response;
 		}
 		$body = wp_remote_retrieve_body(
@@ -120,13 +122,13 @@ class Service {
 	}
 
 	/**
-	 * @return string|\WP_Error
+	 * @return string|WP_Error
 	 */
 	public static function fetch($post_id){
 
 		$response = self::request("/rest/api/1/pixel", array( "amount" => 1 ));
 
-		if($response instanceof \WP_Error) return $response;
+		if($response instanceof WP_Error) return $response;
 
 		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_API_PIXEL_RESPONSE, $response);
 
@@ -137,7 +139,7 @@ class Service {
 			$response = json_decode( $response );
 
 			if(!empty($response->error)){
-				return new \WP_Error(Plugin::ERROR_CODE_REQUEST, $response->error->message, $response);
+				return new WP_Error(Plugin::ERROR_CODE_REQUEST, $response->error->message, $response);
 			}
 
 			if ( ! empty( $response->domain ) && is_array( $response->pixelUids ) && count( $response->pixelUids ) > 0 ) {
@@ -147,25 +149,25 @@ class Service {
 				return $pro_litteris_url;
 			}
 
-			return new \WP_Error(Plugin::ERROR_CODE_REQUEST, "Unbekannte Antwort: ".$response);
+			return new WP_Error(Plugin::ERROR_CODE_REQUEST, "Unbekannte Antwort: ".$response);
 
 		}
 
-		return new \WP_Error(Plugin::ERROR_CODE_REQUEST, "Leere Antwort bei der Anfrage an Service Zählpixel.", $response);
+		return new WP_Error(Plugin::ERROR_CODE_REQUEST, "Leere Antwort bei der Anfrage an Service Zählpixel.", $response);
 	}
 
 	/**
 	 * @param int $post_id
 	 * @param array $message
 	 *
-	 * @return array|\WP_Error
+	 * @return array|WP_Error
 	 */
 	public static function pushMessage( $post_id, $message ) {
 		$response = self::request("/rest/api/1/message", $message);
-		if($response instanceof \WP_Error) return $response;
+		if($response instanceof WP_Error) return $response;
 		$response = json_decode($response);
 		if(isset($response->error) && !empty($response->error)){
-			return new \WP_Error($response->error->code, $response->error->message);
+			return new WP_Error($response->error->code, $response->error->message);
 		}
 		return $response;
 	}
