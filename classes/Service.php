@@ -103,7 +103,6 @@ class Service {
 		$args = array(
 			"headers" => $headers,
 			"body"    => json_encode( $body ),
-			"timeout" => 30,
 			"sslverify" => false,
 		);
 		$response = wp_remote_post(
