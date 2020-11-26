@@ -5,15 +5,11 @@ namespace Palasthotel\ProLitteris;
 /**
  * @property  Plugin plugin
  */
-class User {
+class User extends _Component {
+	
+	public function onCreate() {
+		parent::onCreate();
 
-	/**
-	 * User constructor.
-	 *
-	 * @param Plugin $plugin
-	 */
-	public function __construct($plugin) {
-		$this->plugin = $plugin;
 		add_action( 'show_user_profile', array($this, 'profile_fields'), 100 );
 		add_action( 'edit_user_profile', array($this, 'profile_fields'), 100 );
 

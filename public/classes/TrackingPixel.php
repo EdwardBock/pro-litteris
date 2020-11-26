@@ -7,14 +7,10 @@ namespace Palasthotel\ProLitteris;
 /**
  * @property Plugin plugin
  */
-class Pixel {
-	/**
-	 * Pixel constructor.
-	 *
-	 * @param Plugin $plugin
-	 */
-	public function __construct($plugin) {
-		$this->plugin = $plugin;
+class TrackingPixel extends _Component {
+
+	public function onCreate() {
+		parent::onCreate();
 
 		// TODO: better in wp footer?
 		add_filter( 'the_content', array( $this, 'add_pixel' ) );

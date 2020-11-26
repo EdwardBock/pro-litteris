@@ -7,16 +7,7 @@ use Html2Text\Html2Text;
 /**
  * @property Plugin plugin
  */
-class Post {
-
-	/**
-	 * Post constructor.
-	 *
-	 * @param Plugin $plugin
-	 */
-	public function __construct( $plugin ) {
-		$this->plugin = $plugin;
-	}
+class Post extends _Component {
 
 	public function getPostText( $post_id = NULL ) {
 
@@ -76,7 +67,7 @@ class Post {
 
 			if(empty($proLitterisId)) continue;
 
-			$participants[] = Service::buildParticipant(
+			$participants[] = MessageUtils::buildParticipant(
 				$proLitterisId,
 				$authorId,
 				"AUTHOR",
@@ -87,15 +78,16 @@ class Post {
 
 		if(count($participants) < 1) throw new NoParticipantException();
 
-		$pixelUid = Service::getUid($post_id);
+		$pixel = $this->plugin->repository->getPostPixel($post_id);
+
 		$title = get_the_title($post_id);
 		$text = $this->getPostText($post_id);
 
-		return Service::buildMessage(
+		return MessageUtils::buildMessage(
 			$title,
 			base64_encode($text),
 			$participants,
-			$pixelUid
+			$pixel->uid
 		);
 
 	}

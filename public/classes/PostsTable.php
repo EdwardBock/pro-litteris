@@ -7,15 +7,10 @@ namespace Palasthotel\ProLitteris;
 /**
  * @property Plugin plugin
  */
-class PostsTable {
+class PostsTable extends _Component {
 
-	/**
-	 * PostList constructor.
-	 *
-	 * @param Plugin $plugin
-	 */
-	public function __construct($plugin) {
-		$this->plugin = $plugin;
+	public function onCreate() {
+		parent::onCreate();
 		add_filter( 'manage_posts_columns' , array($this, 'add_column') );
 		add_action( 'manage_posts_custom_column' , array($this,'custom_columns'), 10, 2 );
 	}

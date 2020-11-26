@@ -22,7 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @property PostsTable postList
  * @property Post post
  * @property User user
- * @property Pixel pixel
+ * @property TrackingPixel pixel
+ * @property Database database
+ * @property Repository repository
+ * @property API api
+ * @property Schedule schedule
+ * @property DashboardWidget dashboardWidget
  */
 class Plugin {
 
@@ -31,9 +36,27 @@ class Plugin {
 	 */
 	const DOMAIN = "pro-litteris";
 
+	/**
+	 * ids
+	 */
+	const DASHBOARD_WIDGET_ID = "pro_litteris_dashboard";
+
+	/**
+	 * Schedules
+	 */
+	const SCHEDULE_REFILL_PIXEL_POOL = "pro_litteris_schedule_refill_pixel_pool";
+
+	/**
+	 * filters
+	 */
 	const FILTER_POST_AUTHORS = "pro_litteris_post_authors";
 	const FILTER_POST_TYPES = "pro_litteris_post_types";
-	const FILTER_RENDER_PIXEL= "pro_litteris_render_pixel";
+	const FILTER_RENDER_PIXEL = "pro_litteris_render_pixel";
+
+	/**
+	 * Options
+	 */
+	const OPTION_PIXEL_POOL_SIZE = "_pro_litteris_pixel_pool_size";
 
 	/**
 	 * constants
@@ -44,7 +67,7 @@ class Plugin {
 	 * Meta fields
 	 */
 	const POST_META_PRO_LITTERIS_API_PIXEL_RESPONSE = "_pro_litteris_response";
-	const POST_META_PRO_LITTERIS = "pro-litteris";
+	const POST_META_PRO_LITTERIS_PIXEL_URL = "pro-litteris";
 	const POST_META_PRO_LITTERIS_ERROR = "pro-litteris-error";
 	const POST_META_PRO_LITTERIS_RAW_TEXT = "_pro_litteris_raw_text";
 	const POST_META_PRO_LITTERIS_NOT_NEEDED = "_pro_litteris_not_needed";
@@ -62,6 +85,7 @@ class Plugin {
 	 */
 	const ERROR_CODE_CONFIG = 'pro-litteris-config-error';
 	const ERROR_CODE_REQUEST = 'pro-litteris-request-error';
+	const ERROR_CODE_ASSIGN_PIXEL = 'pro-litteris-assigned-pixel';
 
 	/**
 	 * Plugin constructor
@@ -71,11 +95,11 @@ class Plugin {
 		/**
 		 * load translations
 		 */
-//		load_plugin_textdomain(
-//			Plugin::DOMAIN,
-//			false,
-//			dirname( plugin_basename( __FILE__ ) ) . '/languages'
-//		);
+		load_plugin_textdomain(
+			Plugin::DOMAIN,
+			false,
+			dirname( plugin_basename( __FILE__ ) ) . '/languages'
+		);
 
 		/**
 		 * Base paths
@@ -83,19 +107,64 @@ class Plugin {
 		$this->path = plugin_dir_path( __FILE__ );
 		$this->url  = plugin_dir_url( __FILE__ );
 
-		//do stuff from this plugin only if activated in config, only on production
-		if ( defined( 'PH_PRO_LITTERIS' ) && PH_PRO_LITTERIS ) {
+		require_once dirname( __FILE__ ) . "/vendor/autoload.php";
 
-			require_once dirname( __FILE__ ) . "/vendor/autoload.php";
+		// ----------------------------------------
+		// all about data
+		// ----------------------------------------
+		$this->database   = new Database();
+		$this->api        = new API();
+		$this->repository = new Repository( $this );
 
-			$this->metaBox  = new MetaBox( $this );
-			$this->post     = new Post( $this );
-			$this->postList = new PostsTable( $this );
-			$this->user     = new User( $this );
-			$this->pixel    = new Pixel( $this );
+		// ----------------------------------------
+		// tasks
+		// ----------------------------------------
+		$this->schedule = new Schedule( $this );
 
+		// ----------------------------------------
+		// user interaction
+		// ----------------------------------------
+		$this->dashboardWidget = new DashboardWidget( $this );
+		$this->metaBox         = new MetaBox( $this );
+		$this->post            = new Post( $this );
+		$this->postList        = new PostsTable( $this );
+		$this->user            = new User( $this );
+		$this->pixel           = new TrackingPixel( $this );
+
+
+		// ----------------------------------------
+		// ----------------------------------------
+
+		register_activation_hook( __FILE__, array( $this, "activation" ) );
+		register_deactivation_hook( __FILE__, array( $this, "deactivation" ) );
+
+		if ( WP_DEBUG ) {
+			$this->database->createTable();
 		}
 	}
+
+	public function isEnabled() {
+		return defined( 'PH_PRO_LITTERIS' ) && true === PH_PRO_LITTERIS;
+	}
+
+	public function hasConfig() {
+		return defined( 'PH_PRO_LITTERIS_SYSTEM' ) && is_string( PH_PRO_LITTERIS_SYSTEM )
+		       && defined( 'PH_PRO_LITTERIS_CREDENTIALS' ) && is_string( PH_PRO_LITTERIS_CREDENTIALS );
+	}
+
+	/**
+	 * on plugin activation
+	 */
+	function activation() {
+		$this->database->createTable();;
+	}
+
+	/**
+	 * on plugin deactivation
+	 */
+	function deactivation() {
+	}
+
 
 	public function is_valid_snippet( $snippet ) {
 		// if is error, skip

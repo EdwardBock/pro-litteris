@@ -6,11 +6,21 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Palasthotel\\ProLitteris\\API' => $baseDir . '/classes/API.php',
+    'Palasthotel\\ProLitteris\\DashboardWidget' => $baseDir . '/classes/DashboardWidget.php',
+    'Palasthotel\\ProLitteris\\Database' => $baseDir . '/classes/Database.php',
     'Palasthotel\\ProLitteris\\MetaBox' => $baseDir . '/classes/MetaBox.php',
+    'Palasthotel\\ProLitteris\\Model\\FetchPixelsResponse' => $baseDir . '/classes/Model/FetchPixelsResponse.php',
+    'Palasthotel\\ProLitteris\\Model\\Pixel' => $baseDir . '/classes/Model/Pixel.php',
+    'Palasthotel\\ProLitteris\\Model\\_BaseAPIResponse' => $baseDir . '/classes/Model/_BaseAPIResponse.php',
     'Palasthotel\\ProLitteris\\NoParticipantException' => $baseDir . '/classes/NoParticipantException.php',
-    'Palasthotel\\ProLitteris\\Pixel' => $baseDir . '/classes/Pixel.php',
+    'Palasthotel\\ProLitteris\\Options' => $baseDir . '/classes/Options.php',
     'Palasthotel\\ProLitteris\\Post' => $baseDir . '/classes/Post.php',
     'Palasthotel\\ProLitteris\\PostsTable' => $baseDir . '/classes/PostsTable.php',
+    'Palasthotel\\ProLitteris\\Repository' => $baseDir . '/classes/Repository.php',
+    'Palasthotel\\ProLitteris\\Schedule' => $baseDir . '/classes/Schedule.php',
     'Palasthotel\\ProLitteris\\Service' => $baseDir . '/classes/Service.php',
+    'Palasthotel\\ProLitteris\\TrackingPixel' => $baseDir . '/classes/TrackingPixel.php',
     'Palasthotel\\ProLitteris\\User' => $baseDir . '/classes/User.php',
+    'Palasthotel\\ProLitteris\\_Component' => $baseDir . '/classes/_Component.php',
 );

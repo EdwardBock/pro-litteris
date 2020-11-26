@@ -2,6 +2,7 @@
 
 namespace Palasthotel\ProLitteris;
 
+use Palasthotel\ProLitteris\Model\FetchPixelsResponse;
 use WP_Error;
 
 class API {
@@ -9,11 +10,13 @@ class API {
 	/**
 	 * @param int $amount
 	 *
-	 * @return string[]|WP_Error
+	 * @return FetchPixelsResponse|WP_Error
 	 */
-	public function fetch( $amount = 20 ) {
+	public function fetchPixels( $amount = 20 ) {
 
-		$response = $this->request( "/rest/api/1/pixel", array( "amount" => $amount ) );
+		$requestPath = "/rest/api/1/pixel";
+
+		$response = $this->request( $requestPath, array( "amount" => $amount ) );
 
 		if ( $response instanceof WP_Error ) {
 			return $response;
@@ -22,31 +25,35 @@ class API {
 		if ( empty( $response ) ) {
 			return new WP_Error(
 				Plugin::ERROR_CODE_REQUEST,
-				"Leere Antwort bei der Anfrage an Service Zählpixel.",
-				$response
+				__("Empty response on $response request with about => $amount", Plugin::DOMAIN)
 			);
 		}
 
-		$response = json_decode( $response );
+		return new FetchPixelsResponse($response);
+	}
 
-		if ( ! empty( $response->error ) ) {
-			return new WP_Error( Plugin::ERROR_CODE_REQUEST, $response->error->message, $response );
+	/**
+	 * @param mixed $message
+	 *
+	 * @return array|WP_Error
+	 */
+	public function pushMessage( $message ) {
+		$response = $this->request("/rest/api/1/message", $message);
+		if($response instanceof WP_Error) return $response;
+		$response = json_decode($response);
+		if(isset($response->error) && !empty($response->error)){
+			return new WP_Error($response->error->code, $response->error->message);
 		}
-
-		if ( empty( $response->domain ) || !is_array( $response->pixelUids ) || count( $response->pixelUids ) <= 0 ) {
-			return new WP_Error( Plugin::ERROR_CODE_REQUEST, "Unbekannte Antwort: " . $response );
-		}
-
-		return $response->pixelUids;
+		return $response;
 	}
 
 	/**
 	 * @param string $path
-	 * @param array $body
+	 * @param mixed $body
 	 *
 	 * @return string|WP_Error
 	 */
-	private function request( $path, $body ) {
+	private function request( string $path, $body ) {
 
 		if ( ! defined( 'PH_PRO_LITTERIS_CREDENTIALS' ) ) {
 			return new WP_Error( Plugin::ERROR_CODE_CONFIG, "Missing ProLitteris credentials" );

@@ -4,11 +4,77 @@
 namespace Palasthotel\ProLitteris;
 
 
+use WP_Error;
+
 if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 	return;
 }
 
 class CLI {
+
+	/**
+	 * Refill pixel pool
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--to=<size>]
+	 * : refill to pool size
+	 * ---
+	 * default: -1
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp pro-litteris refillPool post --to=10
+	 *
+	 * @when after_wp_load
+	 */
+	public function refillPool($args, $assoc_args){
+		$size = isset($assoc_args["to"]) ? intval($assoc_args["to"]) : -1;
+		$size = $size < 0 ? Options::getPixelPoolSize() : $size;
+
+		$plugin = Plugin::instance();
+
+		if(!$plugin->isEnabled()){
+			\WP_CLI::error("ProLitteris is not enabled in config.");
+			exit;
+		}
+		if(!$plugin->hasConfig()){
+			\WP_CLI::error("ProLitteris is missing config.");
+			exit;
+		}
+
+		$result = $plugin->repository->refillPixelPool($size);
+
+		if($result instanceof WP_Error){
+			\WP_CLI::error($result);
+			exit;
+		}
+
+		if($result < 1){
+			\WP_CLI::success( "Pixel pool seems to be full already!" );
+			exit;
+		}
+
+		\WP_CLI::success( "Added $result pixel to pixel pool!" );
+	}
+
+	/**
+	 * Add meta pixels that are not in pool to the pool
+	 *
+	 * ## OPTIONS
+	 *
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp pro-litteris addMetaPixelsToPool
+	 *
+	 * @when after_wp_load
+	 */
+	public function addMetaPixelsToPool($args, $assoc_args){
+		global $wpdb;
+		// TODO: sync for older versions
+	}
 
 	/**
 	 * Fetch pixel for post without one
@@ -51,7 +117,7 @@ class CLI {
 		?>
 		SELECT ID FROM <?= $wpdb->posts ?> WHERE
 		ID NOT IN (
-			SELECT post_id FROM <?= $wpdb->postmeta ?> WHERE meta_key = '<?= Plugin::POST_META_PRO_LITTERIS ?>' AND post_id IN ( <?= $queryReduceScope; ?>	)
+			SELECT post_id FROM <?= $wpdb->postmeta ?> WHERE meta_key = '<?= Plugin::POST_META_PRO_LITTERIS_PIXEL_URL ?>' AND post_id IN ( <?= $queryReduceScope; ?>    )
 		)
 		AND ID NOT IN (
 			SELECT post_id FROM <?= $wpdb->postmeta ?> WHERE meta_key = '<?= Plugin::POST_META_PRO_LITTERIS_NOT_NEEDED; ?>' AND post_id IN ( <?= $queryReduceScope; ?>	)
@@ -89,7 +155,7 @@ class CLI {
 
 			// lets fetch a snippet
 			$response = Service::fetch($post_id);
-			if($response instanceof \WP_Error){
+			if($response instanceof WP_Error){
 				Service::saveError($post_id, $response);
 				\WP_CLI::error( "Could not get pixel for $post_id ".$response->get_error_message(Plugin::ERROR_CODE_REQUEST) );
 			} else {
@@ -134,7 +200,7 @@ class CLI {
 		$limit = $assoc_args["limit"];
 		$retryErrors = ($assoc_args["errors"] == "retry");
 
-		$selectPixels = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '".Plugin::POST_META_PRO_LITTERIS."'";
+		$selectPixels = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '".Plugin::POST_META_PRO_LITTERIS_PIXEL_URL . "'";
 		$selectReports = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '".Plugin::POST_META_PRO_LITTERIS_MESSAGE_RESPONSE."'";
 		$selectErrors = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '".Plugin::POST_META_PRO_LITTERIS_MESSAGE_ERROR."'";
 
@@ -172,16 +238,16 @@ class CLI {
 				continue;
 			}
 
-			if(!Service::isMessageValid($message)){
+			if(!MessageUtils::isMessageValid($message)){
 				update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_ERROR, "Internal: Message not valid.");
 				$results->invalid++;
 				$progress->tick();
 				continue;
 			}
 
-			$response = Service::pushMessage($post_id, $message);
+			$response = Plugin::instance()->api->pushMessage($post_id, $message);
 
-			if($response instanceof \WP_Error){
+			if($response instanceof WP_Error){
 				$results->responseError++;
 				update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_ERROR, $response);
 				\WP_CLI::warning($response->get_error_message());
@@ -218,7 +284,7 @@ class CLI {
 				"label" => "Errors fetch pixel",
 			],
 			[
-				"meta_key" => Plugin::POST_META_PRO_LITTERIS,
+				"meta_key" => Plugin::POST_META_PRO_LITTERIS_PIXEL_URL,
 				"label" => "Pixels",
 			],
 			[

@@ -3,11 +3,13 @@
 
 namespace Palasthotel\ProLitteris;
 
+use Palasthotel\ProLitteris\Model\Pixel;
 use wpdb;
 
 /**
  * @property wpdb $wpdb
  * @property string table
+ * @property string tableResponses
  */
 class Database {
 
@@ -18,18 +20,29 @@ class Database {
 		global $wpdb;
 		$this->wpdb = $wpdb;
 		$this->table = $wpdb->prefix . "pro_litteris_pixel_pool";
+		$this->tableResponses = $wpdb->prefix . "pro_litteris_api_responses";
 	}
 
 	/**
-	 * @param $pixel
+	 * @return int
+	 */
+	public function countAvailablePixels() {
+		return intval($this->wpdb->get_var("SELECT count(uid) FROM $this->table WHERE post_id IS NULL"));
+	}
+
+	/**
+	 *
+	 * @param Pixel $pixel
 	 *
 	 * @return bool|int
 	 */
-	public function addToPool($pixel){
+	public function add(Pixel $pixel){
 		return $this->wpdb->insert(
 			$this->table,
 			[
-				"pixel" => $pixel,
+				"uid" => $pixel->uid,
+				"uid_domain" => $pixel->domain,
+				"post_id" => $pixel->post_id,
 			],
 			[ "%s"]
 		);
@@ -37,12 +50,17 @@ class Database {
 
 	/**
 	 *
-	 * @return string|null
+	 * @param int|string $post_id
+	 *
+	 * @return Pixel|null
 	 */
-	public function getPixel($post_id){
-		return $this->wpdb->get_var(
-			$this->wpdb->prepare("SELECT pixel from $this->table WHERE post_id = %d", $post_id)
+	public function getPixel( $post_id ){
+		$row = $this->wpdb->get_row(
+			$this->wpdb->prepare("SELECT uid, uid_domain, post_id from $this->table WHERE post_id = %d", $post_id)
 		);
+		if(!is_object($row) || !isset($row->uid)) return null;
+
+		return $this->rowToPixel($row);
 	}
 
 	/**
@@ -51,10 +69,36 @@ class Database {
 	 * @return bool|int
 	 */
 	public function assignPixel($post_id){
-		$result = $this->wpdb->query($this->wpdb->prepare("UPDATE $this->table SET post_id = %d WHERE pixel IN (
-			SELECT pixel FROM $this->table WHERE post_id IS NULL LIMIT 1
+		return $this->wpdb->query($this->wpdb->prepare("UPDATE $this->table SET post_id = %d WHERE uid IN (
+			SELECT * FROM (SELECT uid FROM $this->table WHERE post_id IS NULL LIMIT 1) as tmp
 		)", $post_id));
-		return $result;
+	}
+
+	/**
+	 * @param mixed $row
+	 *
+	 * @return Model\Pixel
+	 */
+	private function rowToPixel($row){
+		return Model\Pixel::build($row->uid_domain, $row->uid, isset($row->post_id) ? $row->post_id:null);
+	}
+
+	/**
+	 * @param string $response
+	 *
+	 * @param string $message
+	 *
+	 * @return bool|int
+	 */
+	public function addAPIResponse(string $response, string $message = ""){
+		return $this->wpdb->insert(
+			$this->tableResponses,
+			[
+				"response" => $response,
+				"message" => $message,
+				"requested" => time(),
+			]
+		);
 	}
 
 	/**
@@ -62,16 +106,26 @@ class Database {
 	 */
 	function createTable() {
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
 		\dbDelta( "CREATE TABLE IF NOT EXISTS $this->table
 			(
-			pixel varchar(100) not null,
+			uid varchar(100) not null,
+			uid_domain varchar(100) not null,
 			post_id bigint(20) default null,
-			primary key (pixel),
+			primary key (uid),
+			key (uid_domain),
 			key (post_id),
-			unique key post_pixel ( pixel, post_id)
+			unique key post_pixel ( uid, post_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;" );
+
+		\dbDelta( "CREATE TABLE IF NOT EXISTS $this->tableResponses
+			(
+			id bigint(20) unsigned auto_increment,
+			response TEXT NOT NULL,
+			requested bigint(20) NOT NULL,
+			message TEXT NOT NULL,
+			primary key (id),
+			key (requested)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;" );
 	}
-
-
-
 }
