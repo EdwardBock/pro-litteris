@@ -49,6 +49,7 @@ class Plugin {
 	/**
 	 * filters
 	 */
+	const FILTER_PREVENT_PIXEL_ASSIGN = "pro_litteris_prevent_pixel_assign";
 	const FILTER_POST_AUTHORS = "pro_litteris_post_authors";
 	const FILTER_POST_TYPES = "pro_litteris_post_types";
 	const FILTER_RENDER_PIXEL = "pro_litteris_render_pixel";
@@ -64,7 +65,7 @@ class Plugin {
 	const PRO_LITTERIS_MIN_CHAR_COUNT = 2000;
 
 	/**
-	 * Meta fields
+	 * Post meta fields
 	 */
 	const POST_META_PRO_LITTERIS_API_PIXEL_RESPONSE = "_pro_litteris_response";
 	const POST_META_PRO_LITTERIS_PIXEL_URL = "pro-litteris";
@@ -76,6 +77,9 @@ class Plugin {
 	const POST_META_PRO_LITTERIS_MESSAGE_RESPONSE = "_pro_litteris_message_response";
 	const POST_META_PRO_LITTERIS_MESSAGE_SENT_DATE = "_pro_litteris_message_sent_date";
 
+	/**
+	 * User meta fields
+	 */
 	const USER_META_PRO_LITTERIS_ID = "_pro_litteris_id";
 	const USER_META_PRO_LITTERIS_NAME = "_pro_litteris_name";
 	const USER_META_PRO_LITTERIS_SURNAME = "_pro_litteris_surname";

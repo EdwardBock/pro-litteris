@@ -4,6 +4,7 @@
 namespace Palasthotel\ProLitteris;
 
 use Palasthotel\ProLitteris\Model\Pixel;
+use Palasthotel\ProLitteris\Model\PreventPixelAssign;
 use WP_Error;
 
 /**
@@ -70,23 +71,19 @@ class Repository extends _Component {
 	 * @return Pixel|WP_Error
 	 */
 	public function assignPixel($post_id){
-		$pixelUrl = $this->getPostPixelUrl($post_id);
-		if(!empty($pixelUrl)) return new WP_Error(
+
+		/**
+		 * @var PreventPixelAssign $preventAssign
+		 */
+		$preventAssign = apply_filters(Plugin::FILTER_PREVENT_PIXEL_ASSIGN, new PreventPixelAssign(), $post_id);
+
+		if($preventAssign->prevent) return new WP_Error(
 			Plugin::ERROR_CODE_ASSIGN_PIXEL,
-			"Post $post_id already has the pixel $pixelUrl"
+			$preventAssign->message,
 		);
 
 		$this->database->assignPixel($post_id);
-		$pixel = $this->database->getPixel($post_id);
-
-		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_PIXEL_URL, $pixel->toUrl());
-
-		if(empty($pixel)) return new WP_Error(
-			Plugin::ERROR_CODE_ASSIGN_PIXEL,
-			"Could not assign a pixel to post $post_id."
-		);
-
-		return $pixel;
+		return $this->database->getPixel($post_id);
 	}
 
 	/**
@@ -101,15 +98,6 @@ class Repository extends _Component {
 		if(null !== $pixel || !$autoAssign) return $pixel;
 
 		return $this->assignPixel($post_id);
-	}
-
-	/**
-	 * @param string|int $post_id
-	 *
-	 * @return string|false
-	 */
-	public function getPostPixelUrl($post_id){
-		return get_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS_PIXEL_URL, true );
 	}
 
 }

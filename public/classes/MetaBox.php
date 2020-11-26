@@ -77,19 +77,11 @@ class MetaBox extends _Component {
 		}
 
 		if( !($pixel instanceof Pixel) ){
-			printf("<p>Hmmm... something went really wrong if pixel is null here.</p>");
+			printf("<p style='color: #8d0000;'>Hmmm... something went really wrong if pixel is null here.</p>");
 			return;
 		}
 
-		$pixelUrl = $this->plugin->repository->getPostPixelUrl($post_id);
-
-		if($pixel->toUrl() !== $pixelUrl){
-			$calculated = $pixel->toUrl();
-			printf('<p>%s</p>', "Urls not matching '$pixelUrl' vs '$calculated'");
-			return;
-		}
-
-		echo sprintf( '<p>%s</p>', $pixelUrl );
+		echo sprintf( '<p>%s</p>', $pixel->toUrl() );
 
 		//------------------------------------------------------
 		// content report
@@ -234,6 +226,7 @@ class MetaBox extends _Component {
 		$post_id = intval($_GET["post_id"]);
 		if(!current_user_can("edit_post", $post_id)) wp_die("No access");
 
+		$message = [];
 		try{
 			$message = $this->plugin->post->getPostMessage($post_id);
 		} catch (NoParticipantException $e){
@@ -254,7 +247,6 @@ class MetaBox extends _Component {
 
 		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_OBJECT, $message);
 		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_RESPONSE, $response);
-
 
 		wp_send_json_success(array(
 			"object" => $response,
