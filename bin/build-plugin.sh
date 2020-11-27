@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PLUGIN_SLUG="prolitteris"
+PLUGIN_SLUG="pro-litteris"
 PROJECT_PATH=$(pwd)
 BUILD_PATH="${PROJECT_PATH}/build"
 DEST_PATH="$BUILD_PATH/$PLUGIN_SLUG"
