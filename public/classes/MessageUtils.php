@@ -62,7 +62,7 @@ class MessageUtils {
 			||
 			!isset($message["messageText"]["plainText"]) || empty($message["messageText"]["plainText"])
 			||
-			strlen( base64_decode($message["messageText"]["plainText"]) ) < Plugin::PRO_LITTERIS_MIN_CHAR_COUNT
+			strlen( base64_decode($message["messageText"]["plainText"]) ) < Options::getMinCharCount()
 		) return false;
 
 		if(!isset($message["pixelUid"]) || empty($message["pixelUid"])) return false;

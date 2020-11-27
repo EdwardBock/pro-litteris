@@ -4,6 +4,8 @@
 namespace Palasthotel\ProLitteris;
 
 
+use Palasthotel\ProLitteris\Model\Pixel;
+
 /**
  * @property Plugin plugin
  */
@@ -52,6 +54,10 @@ class TrackingPixel extends _Component {
 	 */
 	public function add_pixel( $content ) {
 
+		if ( $this->isAmp() ) {
+			return $content;
+		}
+
 		if(!$this->isEnabled(get_post_type())){
 			return $content;
 		}
@@ -60,18 +66,13 @@ class TrackingPixel extends _Component {
 		    return $content;
         }
 
-		$snippet = Service::getSnippet( get_the_ID() );
+		$pixel = $this->plugin->repository->getPostPixel(get_the_ID());
 
-		// if is error, skip
-		if( ! $this->plugin->is_valid_snippet( $snippet ) ) {
+		if(!($pixel instanceof Pixel)){
 			return $content;
 		}
 
-		if ( $this->isAmp() ) {
-			return $content;
-		}
-
-		return $content . '<img src="' . $snippet . '" height="1" width="1" border="0" class="pro-litteris-pixel" />';
+		return $content . '<img src="' . $pixel->toUrl() . '" height="1" width="1" border="0" class="pro-litteris-pixel" />';
 
 	}
 
@@ -85,20 +86,18 @@ class TrackingPixel extends _Component {
             return;
         }
 
-		$snippet = Service::getSnippet( get_the_ID() );
+        $pixel = $this->plugin->repository->getPostPixel(get_the_ID());
 
-		// if is error, skip
-		if( ! $this->plugin->is_valid_snippet( $snippet ) ) {
-			return;
+        if($pixel instanceof Pixel){
+			?>
+			<amp-pixel
+				class="pro-litteris-pixel"
+				src="<?= $pixel->toUrl(); ?> "
+				layout="nodisplay"
+			></amp-pixel>
+			<?php
 		}
 
-		?>
-		<amp-pixel
-			class="pro-litteris-pixel"
-			src="<?php echo $snippet; ?> "
-			layout="nodisplay"
-		></amp-pixel>
-		<?php
 	}
 
 

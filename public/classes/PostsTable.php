@@ -4,6 +4,8 @@
 namespace Palasthotel\ProLitteris;
 
 
+use Palasthotel\ProLitteris\Model\Pixel;
+
 /**
  * @property Plugin plugin
  */
@@ -38,23 +40,25 @@ class PostsTable extends _Component {
 	public function custom_columns($column, $post_id){
 		if($column == 'pro-litteris'){
 
-			if($this->plugin->post->isReported($post_id)){
+			$pixel = $this->plugin->repository->getPostPixel($post_id);
+
+			if($pixel instanceof Pixel && $this->plugin->database->isMessageReported($pixel->uid)){
 				echo "<span title='Inhalt wurde bei ProLitteris gemeldet' style='cursor: help;'>✅</span>";
 				return;
 			}
 
 			if(!$this->plugin->post->needsPixel($post_id)){
-				echo "<span title='Es wird kein Pixel benötigt, weil der Text unter ".Plugin::PRO_LITTERIS_MIN_CHAR_COUNT." Zeichen hat.' style='cursor: help;'>⚪️</span>";
+				echo "<span title='Es wird kein Pixel benötigt, weil der Text unter ".Options::getMinCharCount()." Zeichen hat.' style='cursor: help;'>⚪️</span>";
 				return;
 			}
 
-			$db_value = Service::getSnippet($post_id);
-
-			if($db_value instanceOf \WP_Error){
-				$error = $db_value->get_error_message(Plugin::ERROR_CODE_REQUEST);
+			if( $pixel instanceof \WP_Error ){
+				$error = $pixel->get_error_message();
 				echo "<span title='$error' style='cursor: help;'>🔴</span>";
 				return;
-			} else if( $db_value !== false && ! empty( $db_value ) ) {
+			}
+
+			if( $pixel instanceof Pixel){
 				echo "<span title='Inhalt ist bereit für die Meldung bei ProLitteris' style='cursor: help;'>🔶</span>";
 				return;
 			}

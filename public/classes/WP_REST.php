@@ -32,7 +32,7 @@ class WP_REST extends _Component {
 
 					$text = $this->plugin->post->getPostText($postId);
 					if ( ! $this->plugin->post->needsPixel( $postId, $text ) ) {
-						$response->info = "Zählpixel werden erst ab " . Plugin::PRO_LITTERIS_MIN_CHAR_COUNT . " Zeichen abgerufen. Dieser Text zählt " . strlen( $text ) . " Zeichen. Speichern zum aktualisieren.";
+						$response->info = "Zählpixel werden erst ab " . Options::getMinCharCount() . " Zeichen abgerufen. Dieser Text zählt " . strlen( $text ) . " Zeichen. Speichern zum aktualisieren.";
 						return $response;
 					}
 

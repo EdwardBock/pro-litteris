@@ -10,6 +10,11 @@ use WP_Error;
  */
 class Post extends _Component {
 
+	/**
+	 * @param string|int|null $post_id
+	 *
+	 * @return string
+	 */
 	public function getPostText( $post_id = null ) {
 
 		// generate from content
@@ -31,22 +36,16 @@ class Post extends _Component {
 		return $html2text->getText();
 	}
 
-	public function savePostText( $post_id, $text ) {
-		update_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS_RAW_TEXT, $text );
-	}
-
+	/**
+	 * @param string|int|null $post_id
+	 * @param null $text
+	 *
+	 * @return bool
+	 */
 	public function needsPixel( $post_id = null, $text = null ) {
 		$text = ( $text == null ) ? $this->getPostText( $post_id ) : $text;
 
-		return strlen( $text ) >= Plugin::PRO_LITTERIS_MIN_CHAR_COUNT;
-	}
-
-	public function saveNeedsPixel( $post_id, $needsPixel ) {
-		if ( ! $needsPixel ) {
-			update_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS_NOT_NEEDED, "1" );
-		} else {
-			delete_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS_NOT_NEEDED );
-		}
+		return strlen( $text ) >= Options::getMinCharCount();
 	}
 
 	/**
@@ -110,15 +109,6 @@ class Post extends _Component {
 			$pixel->uid
 		);
 
-	}
-
-
-	public function getReportResponse( $post_id ) {
-		return get_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_RESPONSE, true );
-	}
-
-	public function isReported( $post_id ) {
-		return is_object( $this->getReportResponse( $post_id ) );
 	}
 
 }
