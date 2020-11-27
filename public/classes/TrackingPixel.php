@@ -13,8 +13,6 @@ class TrackingPixel extends _Component {
 
 	public function onCreate() {
 		parent::onCreate();
-
-		// TODO: better in wp footer?
 		add_filter( 'the_content', array( $this, 'add_pixel' ) );
 		add_action( 'amp_post_template_footer', array( $this, 'amp_post_template_footer' ) );
 	}
