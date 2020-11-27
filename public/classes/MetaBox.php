@@ -14,15 +14,17 @@ use WP_Post;
  */
 class MetaBox extends _Component {
 
+	const ACTION_AJAX_GET_PLAINTEXT = "litteris_get_plaintext";
 	const ACTION_AJAX_SEND_MESSAGE = "litteris_send_message";
 
 	function onCreate() {
 		parent::onCreate();
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
-		add_action( 'save_post', array($this, 'save_post'));
+		add_action( 'save_post', array( $this, 'save_post' ) );
 
-		add_action( 'wp_ajax_'.self::ACTION_AJAX_SEND_MESSAGE, array($this, 'ajax_send_message'));
+		add_action( 'wp_ajax_' . self::ACTION_AJAX_GET_PLAINTEXT, array( $this, 'ajax_get_plaintext' ) );
+		add_action( 'wp_ajax_' . self::ACTION_AJAX_SEND_MESSAGE, array( $this, 'ajax_send_message' ) );
 	}
 
 	/**
@@ -49,35 +51,40 @@ class MetaBox extends _Component {
 	/**
 	 * @param WP_Post $post
 	 */
-	public function render_meta_box(WP_Post $post){
+	public function render_meta_box( WP_Post $post ) {
 
 		$post_id = $post->ID;
 
 		//------------------------------------------------------
 		// requirements for a pixel
 		//------------------------------------------------------
-		$text = $this->plugin->post->getPostText($post_id);
-		if(!$this->plugin->post->needsPixel($post_id, $text)){
-			echo "<p>Zählpixel werden erst ab ".Plugin::PRO_LITTERIS_MIN_CHAR_COUNT." Zeichen abgerufen. Dieser Text zählt ".strlen($text). " Zeichen.";
+		$text = $this->plugin->post->getPostText( $post_id );
+		if ( ! $this->plugin->post->needsPixel( $post_id, $text ) ) {
+			echo "<p>Zählpixel werden erst ab " . Plugin::PRO_LITTERIS_MIN_CHAR_COUNT . " Zeichen abgerufen. Dieser Text zählt " . strlen( $text ) . " Zeichen.";
+
 			return;
 		}
 
 		//------------------------------------------------------
 		// is pixel assigned or assignable?
 		//------------------------------------------------------
-		$pixel = $this->plugin->repository->getPostPixel($post_id, true);
-		if($pixel instanceOf WP_Error){
+		$pixel = $this->plugin->repository->getPostPixel( $post_id, true );
+		if ( $pixel instanceof WP_Error ) {
 
-			$error = $pixel->get_error_message(Plugin::ERROR_CODE_REQUEST);
-			if(empty($error)) $error = $pixel->get_error_message();
+			$error = $pixel->get_error_message( Plugin::ERROR_CODE_REQUEST );
+			if ( empty( $error ) ) {
+				$error = $pixel->get_error_message();
+			}
 
-			printf( "<p style='color: #8d0000;'>%s</p>", $error);
+			printf( "<p style='color: #8d0000;'>%s</p>", $error );
+
 			return;
 
 		}
 
-		if( !($pixel instanceof Pixel) ){
-			printf("<p style='color: #8d0000;'>Hmmm... something went really wrong if pixel is null here.</p>");
+		if ( ! ( $pixel instanceof Pixel ) ) {
+			printf( "<p style='color: #8d0000;'>Hmmm... something went really wrong if pixel is null here.</p>" );
+
 			return;
 		}
 
@@ -88,43 +95,45 @@ class MetaBox extends _Component {
 		//------------------------------------------------------
 		echo "<h3>Meldung</h3>";
 
-		$messageResponse = get_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_RESPONSE, true);
+		$messageResponse = get_post_meta( $post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_RESPONSE, true );
 
-		if(is_object($messageResponse)){
+		if ( is_object( $messageResponse ) ) {
 			$created = $messageResponse->createdAt;
 			echo "<p>Inhalt wurde am $created gemeldet.</p>";
+
 			return;
 		}
 
-		$message = null;
-		try{
-			$message = $this->plugin->post->getPostMessage($post_id);
-		}catch (NoParticipantException $e){
+		$message = $this->plugin->post->getPostMessage( $post_id );
+
+		if ( $message instanceof WP_Error ) {
 			echo "<p>🚨 Es gibt keine validen Autoren für eine Meldung an ProLitteris.</p>";
+
 			return;
 		}
 
-		if(!MessageUtils::isMessageValid($message)){
+		if ( ! MessageUtils::isMessageValid( $message ) ) {
 			echo "<p>🚨 Konnte keine valide Meldung bauen. Haben alle Autoren ProLitteris Mitgliedsnummern?</p>";
+
 			return;
 		}
 
 		$pixelUid = $message["pixelUid"];
 		echo "<p><strong>Pixel ID: </strong> $pixelUid</p>";
 
-		echo "<p><strong>Titel:</strong> ".$message["title"]."</p>";
+		echo "<p><strong>Titel:</strong> " . $message["title"] . "</p>";
 
-		$text = base64_decode($message["messageText"]["plainText"]);
-		echo "<p><strong>Text ( ".strlen($text)." Zeichen):</strong><br/>";
+		$text = base64_decode( $message["messageText"]["plainText"] );
+		echo "<p><strong>Text ( " . strlen( $text ) . " Zeichen):</strong><br/>";
 		echo "<textarea readonly='readonly' style='width: 100%;' rows='10'>";
 		echo $text;
 		echo "</textarea></p>";
 
-		foreach ($message["participants"] as $participant){
+		foreach ( $message["participants"] as $participant ) {
 			$proLitterisId = $participant["memberId"];
-			$systemId = $participant["internalIdentification"];
-			$firstName = $participant["firstName"];
-			$surName = $participant["surName"];
+			$systemId      = $participant["internalIdentification"];
+			$firstName     = $participant["firstName"];
+			$surName       = $participant["surName"];
 			$participation = $participant['participation'];
 			echo "<p>";
 			echo "Vorname: $firstName<br/>";
@@ -140,24 +149,24 @@ class MetaBox extends _Component {
 		echo "<button class='button-primary' id='pro-litteres-send-message'>Meldung abschicken</button>";
 		echo "<p id='pro-litteris-message-response' class='description'></p>";
 
-		$param_action = "action=".self::ACTION_AJAX_SEND_MESSAGE;
+		$param_action  = "action=" . self::ACTION_AJAX_SEND_MESSAGE;
 		$param_post_id = "post_id=$post_id";
 		?>
 		<script>
-			jQuery(function($){
+			jQuery(function ($) {
 				let sending = false;
 				const $response = $("#pro-litteris-message-response");
-				$("#pro-litteres-send-message").on("click", function(e){
+				$("#pro-litteres-send-message").on("click", function (e) {
 					e.preventDefault();
 					const $button = $(this);
-					if(sending) return;
+					if (sending) return;
 					sending = true;
 					$button.prop('disabled', true);
-					jQuery.get(ajaxurl+"?<?php echo $param_action ?>&<?php echo $param_post_id ?>", function(response){
+					jQuery.get(ajaxurl + "?<?php echo $param_action ?>&<?php echo $param_post_id ?>", function (response) {
 						$button.prop('disabled', false);
 						sending = false;
 						console.log(response);
-						if(response.success){
+						if (response.success) {
 							$button.hide();
 						}
 						$response.text(JSON.stringify(response.data));
@@ -171,10 +180,12 @@ class MetaBox extends _Component {
 	/**
 	 * @param $post_id
 	 */
-	public function save_post($post_id){
+	public function save_post( $post_id ) {
 
 		// it not allowed to edit skip it!
-		if(!current_user_can("edit_post", $post_id)) return;
+		if ( ! current_user_can( "edit_post", $post_id ) ) {
+			return;
+		}
 
 		// If this is just a revision, don't do anything
 		if ( wp_is_post_revision( $post_id ) ) {
@@ -184,37 +195,14 @@ class MetaBox extends _Component {
 		$post_type = get_post_type( $post_id );
 
 		// Wee need to do this only for few post types
-		if ( ! $this->plugin->pixel->isEnabled($post_type)) {
+		if ( ! $this->plugin->pixel->isEnabled( $post_type ) ) {
 			return;
 		}
 
-		$snippet = Service::getSnippet($post_id);
+		$pixel = $this->plugin->repository->getPostPixel( $post_id );
 
-		// if we already got a snippet skip
-		if(is_string($snippet) && !empty($snippet)){
-			return;
-		}
-
-		// if we got an error, only fetch again if retry is activated
-		if($snippet instanceof WP_Error ) return;
-
-		// save cleaned up text stats
-		$text = $this->plugin->post->getPostText($post_id);
-		$needsPixel = $this->plugin->post->needsPixel($post_id, $text);
-		$this->plugin->post->saveNeedsPixel($post_id, $needsPixel);
-
-		if(!$needsPixel){
-			return;
-		}
-
-		$this->plugin->post->savePostText($post_id, $text);
-
-		// lets fetch a snippet
-		$response = Service::fetch($post_id);
-		if($response instanceof WP_Error){
-			Service::saveError($post_id, $response);
-		} else {
-			Service::saveSnippet($post_id, $response);
+		if ( ! ( $pixel instanceof Pixel ) && $this->plugin->post->needsPixel( $post_id ) ) {
+			$this->plugin->repository->assignPixel( $post_id ); // if pixel is available in pool it will be assigned
 		}
 
 	}
@@ -222,35 +210,34 @@ class MetaBox extends _Component {
 	/**
 	 * ajax call resolver
 	 */
-	public function ajax_send_message(){
-		$post_id = intval($_GET["post_id"]);
-		if(!current_user_can("edit_post", $post_id)) wp_die("No access");
-
-		$message = [];
-		try{
-			$message = $this->plugin->post->getPostMessage($post_id);
-		} catch (NoParticipantException $e){
-			update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_ERROR, "no valid participant");
-			wp_send_json_error(["message" => "no valid participant"]);
+	public function ajax_send_message() {
+		$post_id = intval( $_GET["post_id"] );
+		if ( ! current_user_can( "edit_post", $post_id ) ) {
+			wp_send_json_error( "Access denied.", 403 );
 		}
 
-		if(!MessageUtils::isMessageValid($message)){
-			wp_send_json_error(array(
-				"message" => "Message object is not valid",
-				"object" => $message,
-			));
+		$response = $this->plugin->repository->pushPostMessage( $post_id );
+
+		if ( $response instanceof WP_Error ) {
+			wp_send_json_error( $response );
+			exit;
 		}
 
-		$response = $this->plugin->api->pushMessage($message);
-
-		if($response instanceof WP_Error) wp_send_json_error($response);
-
-		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_OBJECT, $message);
-		update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_RESPONSE, $response);
-
-		wp_send_json_success(array(
+		wp_send_json_success( array(
 			"object" => $response,
-		));
+		) );
+	}
+
+	/**
+	 * ajax call resolver
+	 */
+	public function ajax_get_plaintext() {
+		$post_id = intval( $_GET["post_id"] );
+		if ( ! current_user_can( "edit_post", $post_id ) ) {
+			wp_send_json_error( "Access denied.", 403 );
+			exit;
+		}
+		wp_send_json_success( $this->plugin->post->getPostText($post_id));
 	}
 
 }

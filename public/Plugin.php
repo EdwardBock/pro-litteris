@@ -28,6 +28,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @property API api
  * @property Schedule schedule
  * @property DashboardWidget dashboardWidget
+ * @property WP_REST rest
+ * @property Assets assets
+ * @property Gutenberg gutenberg
  */
 class Plugin {
 
@@ -42,6 +45,12 @@ class Plugin {
 	const DASHBOARD_WIDGET_ID = "pro_litteris_dashboard";
 
 	/**
+	 * handles
+	 */
+	const HANDLE_GUTENBERG_JS = "pro_litteris_gutenberg_script";
+	const HANDLE_GUTENBERG_CSS = "pro_litteris_gutenberg_style";
+
+	/**
 	 * Schedules
 	 */
 	const SCHEDULE_REFILL_PIXEL_POOL = "pro_litteris_schedule_refill_pixel_pool";
@@ -50,6 +59,7 @@ class Plugin {
 	 * filters
 	 */
 	const FILTER_PREVENT_PIXEL_ASSIGN = "pro_litteris_prevent_pixel_assign";
+	const FILTER_POST_MESSAGE_CONTENT = "pro_litteris_post_message_content";
 	const FILTER_POST_AUTHORS = "pro_litteris_post_authors";
 	const FILTER_POST_TYPES = "pro_litteris_post_types";
 	const FILTER_RENDER_PIXEL = "pro_litteris_render_pixel";
@@ -89,7 +99,14 @@ class Plugin {
 	 */
 	const ERROR_CODE_CONFIG = 'pro-litteris-config-error';
 	const ERROR_CODE_REQUEST = 'pro-litteris-request-error';
+	const ERROR_CODE_RESPONSE = 'pro-litteris-response-error';
 	const ERROR_CODE_ASSIGN_PIXEL = 'pro-litteris-assigned-pixel';
+	const ERROR_CODE_PUSH_MESSAGE = 'pro-litteris-push-message';
+
+	/**
+	 * rest fields
+	 */
+	const REST_FIELD = "pro_litteris";
 
 	/**
 	 * Plugin constructor
@@ -119,6 +136,8 @@ class Plugin {
 		$this->database   = new Database();
 		$this->api        = new API();
 		$this->repository = new Repository( $this );
+		$this->rest       = new WP_REST( $this );
+		$this->assets     = new Assets( $this );
 
 		// ----------------------------------------
 		// tasks
@@ -129,6 +148,7 @@ class Plugin {
 		// user interaction
 		// ----------------------------------------
 		$this->dashboardWidget = new DashboardWidget( $this );
+		$this->gutenberg       = new Gutenberg( $this );
 		$this->metaBox         = new MetaBox( $this );
 		$this->post            = new Post( $this );
 		$this->postList        = new PostsTable( $this );

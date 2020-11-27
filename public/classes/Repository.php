@@ -15,7 +15,7 @@ class Repository extends _Component {
 
 	public function onCreate() {
 		parent::onCreate();
-		$this->api = new API();
+		$this->api      = new API();
 		$this->database = new Database();
 	}
 
@@ -25,38 +25,41 @@ class Repository extends _Component {
 	 * @return int|WP_Error
 	 */
 	public function refillPixelPool( int $desiredPoolSize ) {
-		$size = $this->database->countAvailablePixels();
+		$size              = $this->database->countAvailablePixels();
 		$neededPixelsCount = $desiredPoolSize - $size;
 
-		if($neededPixelsCount <= 0) return 0;
+		if ( $neededPixelsCount <= 0 ) {
+			return 0;
+		}
 
 
-		$response = $this->api->fetchPixels($neededPixelsCount);
+		$response = $this->api->fetchPixels( $neededPixelsCount );
 
-		if($response instanceof WP_Error){
+		if ( $response instanceof WP_Error ) {
 			$this->database->addAPIResponse(
 				"",
 				$response->get_error_message()
 			);
+
 			return $response;
 		}
 
-		if($response->error instanceof WP_Error){
+		if ( $response->error instanceof WP_Error ) {
 			$this->database->addAPIResponse(
 				$response->raw,
 				$response->error->get_error_message()
 			);
+
 			return $response->error;
 		}
 
-		// protocol
-		$this->database->addAPIResponse($response->raw);
+		$this->database->addAPIResponse( $response->raw );
 
 		$count = 0;
-		foreach ($response->pixels as $pixel){
-			$result = $this->database->add($pixel);
-			if($result){
-				$count+=$result;
+		foreach ( $response->pixels as $pixel ) {
+			$result = $this->database->add( $pixel );
+			if ( $result ) {
+				$count += $result;
 			}
 		}
 
@@ -66,24 +69,28 @@ class Repository extends _Component {
 
 	/**
 	 * assign a pixel from pool to post
+	 *
 	 * @param int|string $post_id
 	 *
 	 * @return Pixel|WP_Error
 	 */
-	public function assignPixel($post_id){
+	public function assignPixel( $post_id ) {
 
 		/**
 		 * @var PreventPixelAssign $preventAssign
 		 */
-		$preventAssign = apply_filters(Plugin::FILTER_PREVENT_PIXEL_ASSIGN, new PreventPixelAssign(), $post_id);
+		$preventAssign = apply_filters( Plugin::FILTER_PREVENT_PIXEL_ASSIGN, new PreventPixelAssign(), $post_id );
 
-		if($preventAssign->prevent) return new WP_Error(
-			Plugin::ERROR_CODE_ASSIGN_PIXEL,
-			$preventAssign->message,
-		);
+		if ( $preventAssign->prevent ) {
+			return new WP_Error(
+				Plugin::ERROR_CODE_ASSIGN_PIXEL,
+				$preventAssign->message,
+			);
+		}
 
-		$this->database->assignPixel($post_id);
-		return $this->database->getPixel($post_id);
+		$this->database->assignPixel( $post_id );
+
+		return $this->database->getPixel( $post_id );
 	}
 
 	/**
@@ -93,11 +100,68 @@ class Repository extends _Component {
 	 *
 	 * @return Pixel|WP_Error|null
 	 */
-	public function getPostPixel($post_id, $autoAssign = false){
-		$pixel = $this->database->getPixel($post_id);
-		if(null !== $pixel || !$autoAssign) return $pixel;
+	public function getPostPixel( $post_id, $autoAssign = false ) {
+		$pixel = $this->database->getPixel( $post_id );
+		if ( null !== $pixel || ! $autoAssign ) {
+			return $pixel;
+		}
 
-		return $this->assignPixel($post_id);
+		return $this->assignPixel( $post_id );
+	}
+
+	/**
+	 * @param int|string $post_id
+	 *
+	 * @return bool|int|WP_Error
+	 */
+	public function pushPostMessage( $post_id ) {
+
+		$pixel = $this->getPostPixel($post_id);
+
+		if($pixel instanceof WP_Error){
+			return $pixel;
+		}
+
+		if(null === $pixel){
+			return new WP_Error(
+				Plugin::ERROR_CODE_PUSH_MESSAGE,
+				"Could not find a pixel for post $post_id"
+			);
+		}
+
+		$isAlreadyReported = $this->database->isMessageReported($pixel->uid);
+		if($isAlreadyReported){
+			return new WP_Error(
+				Plugin::ERROR_CODE_PUSH_MESSAGE,
+				"Pixel seems to be already reported: $pixel->uid"
+			);
+		}
+
+		$message = $this->plugin->post->getPostMessage( $post_id );
+
+		if($message instanceof WP_Error) return $message;
+
+		if ( ! MessageUtils::isMessageValid( $message ) ) {
+			return new WP_Error(
+				Plugin::ERROR_CODE_PUSH_MESSAGE,
+				"Invalid message."
+			);
+		}
+
+		$response = $this->plugin->api->pushMessage( $message );
+
+		if ( $response instanceof WP_Error ) {
+			return $response;
+		}
+
+		if($response->error instanceof WP_Error){
+			return $response->error;
+		}
+
+		$response->message->plaintext = $this->plugin->post->getPostText($post_id);
+
+		return $this->plugin->database->saveMessage($response->message, get_current_user_id(), $response->raw);
+
 	}
 
 }

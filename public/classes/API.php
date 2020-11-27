@@ -3,6 +3,7 @@
 namespace Palasthotel\ProLitteris;
 
 use Palasthotel\ProLitteris\Model\FetchPixelsResponse;
+use Palasthotel\ProLitteris\Model\PushMessageResponse;
 use WP_Error;
 
 class API {
@@ -35,16 +36,13 @@ class API {
 	/**
 	 * @param mixed $message
 	 *
-	 * @return array|WP_Error
+	 * @return PushMessageResponse|WP_Error
 	 */
 	public function pushMessage( $message ) {
 		$response = $this->request("/rest/api/1/message", $message);
 		if($response instanceof WP_Error) return $response;
-		$response = json_decode($response);
-		if(isset($response->error) && !empty($response->error)){
-			return new WP_Error($response->error->code, $response->error->message);
-		}
-		return $response;
+
+		return new PushMessageResponse($response);
 	}
 
 	/**

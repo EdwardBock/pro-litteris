@@ -229,9 +229,9 @@ class CLI {
 
 		foreach ($post_ids as $index =>  $post_id){
 
-			try{
-				$message = Plugin::instance()->post->getPostMessage($post_id);
-			} catch (NoParticipantException $e){
+			$message = Plugin::instance()->post->getPostMessage($post_id);
+
+			if($message instanceof WP_Error){
 				update_post_meta($post_id, Plugin::POST_META_PRO_LITTERIS_MESSAGE_ERROR, "no valid participant");
 				$results->noParticipant++;
 				$progress->tick();

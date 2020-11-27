@@ -3,6 +3,7 @@
 
 namespace Palasthotel\ProLitteris;
 
+use Palasthotel\ProLitteris\Model\Message;
 use Palasthotel\ProLitteris\Model\Pixel;
 use wpdb;
 
@@ -10,6 +11,7 @@ use wpdb;
  * @property wpdb $wpdb
  * @property string table
  * @property string tableResponses
+ * @property string $tableMessages
  */
 class Database {
 
@@ -18,8 +20,9 @@ class Database {
 	 */
 	public function __construct() {
 		global $wpdb;
-		$this->wpdb = $wpdb;
-		$this->table = $wpdb->prefix . "pro_litteris_pixel_pool";
+		$this->wpdb           = $wpdb;
+		$this->table          = $wpdb->prefix . "pro_litteris_pixel_pool";
+		$this->tableMessages  = $wpdb->prefix . "pro_litteris_messages";
 		$this->tableResponses = $wpdb->prefix . "pro_litteris_api_responses";
 	}
 
@@ -84,19 +87,77 @@ class Database {
 	}
 
 	/**
+	 * @param Message $message
+	 *
+	 * @param string|int|null $user_id
+	 * @param string|null $response
+	 *
+	 * @return bool|int
+	 */
+	public function saveMessage(Message $message, $user_id = null, string $response = null){
+		return $this->wpdb->replace(
+			$this->tableMessages,
+			[
+				"pixel_uid" => $message->pixelUid,
+				"title" => $message->title,
+				"plaintext" => $message->plaintext,
+				"participants" => json_encode($message->participants),
+				"response" => $response,
+				"reported" => $message->reported,
+				"reported_by" => $user_id,
+			]
+		);
+	}
+
+	/**
+	 * @param $pixelUid
+	 *
+	 * @return bool
+	 */
+	public function isMessageReported($pixelUid){
+		return intval($this->wpdb->get_var(
+			$this->wpdb->prepare("SELECT count(pixel_uid) FROM $this->tableMessages WHERE pixel_uid = %s AND reported IS NOT null", $pixelUid)
+		)) > 0;
+	}
+
+	/**
+	 * @param string $pixelUid
+	 *
+	 * @return false|Message
+	 */
+	public function getMessage($pixelUid){
+		$row = $this->wpdb->get_row(
+			$this->wpdb->prepare("SELECT * FROM $this->tableMessages WHERE pixel_uid = %s", $pixelUid)
+		);
+		if(!isset($row->pixel_uid)){
+			return false;
+		}
+		$message = new Message($row->pixel_uid);
+		$message->title = $row->title;
+		$message->plaintext = $row->plaintext;
+		$message->reported = $row->reported;
+		$message->participants = json_decode($row->participants);
+
+		return $message;
+	}
+
+	/**
 	 * @param string $response
 	 *
 	 * @param string $message
 	 *
+	 * @param null $pixelUID
+	 *
 	 * @return bool|int
 	 */
-	public function addAPIResponse(string $response, string $message = ""){
+	public function addAPIResponse(string $response, string $message = "", $pixelUID = null){
 		return $this->wpdb->insert(
 			$this->tableResponses,
 			[
 				"response" => $response,
 				"message" => $message,
 				"requested" => time(),
+				"pixel_uid" => $pixelUID,
 			]
 		);
 	}
@@ -112,10 +173,27 @@ class Database {
 			uid varchar(100) not null,
 			uid_domain varchar(100) not null,
 			post_id bigint(20) default null,
+
 			primary key (uid),
 			key (uid_domain),
 			key (post_id),
 			unique key post_pixel ( uid, post_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;" );
+
+		\dbDelta( "CREATE TABLE IF NOT EXISTS $this->tableMessages
+			(
+			pixel_uid varchar(100) not null,
+			title varchar(190) NOT NULL,
+			plaintext TEXT NOT NULL,
+			participants TEXT NOT NULL,
+			response TEXT DEFAULT NULL,
+			reported bigint(20) DEFAULT NULL,
+			reported_by bigint(20) DEFAULT NULL,
+
+			primary key (pixel_uid),
+			key (title),
+			key (reported),
+			key (reported_by)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;" );
 
 		\dbDelta( "CREATE TABLE IF NOT EXISTS $this->tableResponses
@@ -124,8 +202,11 @@ class Database {
 			response TEXT NOT NULL,
 			requested bigint(20) NOT NULL,
 			message TEXT NOT NULL,
+			pixel_uid varchar(100) DEFAULT NULL,
+
 			primary key (id),
-			key (requested)
+			key (requested),
+			key (pixel_uid)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;" );
 	}
 }
