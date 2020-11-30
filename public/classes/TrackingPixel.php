@@ -19,7 +19,7 @@ class TrackingPixel extends _Component {
 
 	/**
 	 * list of post types that are using pro litteris pixel
-	 * @return mixed|void
+	 * @return array
 	 */
 	public function enabledPostTypes(){
 		return apply_filters(Plugin::FILTER_POST_TYPES, array("post"));
