@@ -3,7 +3,7 @@
 /**
  * Plugin Name: ProLitteris
  * Description: Integration of prolitteris.ch services.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Palasthotel <rezeption@palasthotel.de> (Edward Bock)
  * Author URI: https://palasthotel.de
  */
@@ -30,6 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @property WP_REST rest
  * @property Assets assets
  * @property Gutenberg gutenberg
+ * @property Migrate migrate
  */
 class Plugin {
 
@@ -67,7 +68,7 @@ class Plugin {
 	 * Options
 	 */
 	const OPTION_PIXEL_POOL_SIZE = "_pro_litteris_pixel_pool_size";
-	const OPTION_MIN_CHAR_COUNT= "_pro_litteris_min_char_count";
+	const OPTION_MIN_CHAR_COUNT = "_pro_litteris_min_char_count";
 
 	/**
 	 * User meta fields
@@ -120,6 +121,7 @@ class Plugin {
 		$this->repository = new Repository( $this );
 		$this->rest       = new WP_REST( $this );
 		$this->assets     = new Assets( $this );
+		$this->migrate    = new Migrate( $this );
 
 		// ----------------------------------------
 		// tasks

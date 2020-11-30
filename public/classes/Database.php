@@ -87,6 +87,20 @@ class Database {
 	}
 
 	/**
+	 * @param int|string $post_id
+	 *
+	 * @return bool|int
+	 */
+	public function deleteForPost($post_id){
+		return $this->wpdb->delete(
+			$this->table,
+			[
+				"post_id" => $post_id,
+			]
+		);
+	}
+
+	/**
 	 * @param Message $message
 	 *
 	 * @param string|int|null $user_id

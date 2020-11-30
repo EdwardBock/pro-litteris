@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
 Tested up to: 5.5.3
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -28,6 +28,9 @@ Integrate ProLitteris into your wordpress.
 
 
 == Changelog ==
+
+= 1.2.1 =
+* Feature: Migrate support
 
 = 1.2.0 =
 * Gutenberg: Moved meta box into Gutenberg sidebar

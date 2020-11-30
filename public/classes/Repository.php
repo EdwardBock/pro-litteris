@@ -84,7 +84,7 @@ class Repository extends _Component {
 		if ( $preventAssign->prevent ) {
 			return new WP_Error(
 				Plugin::ERROR_CODE_ASSIGN_PIXEL,
-				$preventAssign->message,
+				$preventAssign->message
 			);
 		}
 
