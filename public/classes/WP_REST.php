@@ -65,10 +65,14 @@ class WP_REST extends _Component {
 					if(false === $response->message){
 						$postMessage = $this->plugin->post->getPostMessage($postId);
 						$response->messageDraft = new \stdClass();
-						$response->messageDraft->pixelUid = $postMessage["pixelUid"];
-						$response->messageDraft->title = $postMessage["title"];
-						$response->messageDraft->participants = $postMessage["participants"];
-						$response->messageDraft->plaintext = $text;
+						if( $postMessage instanceof WP_Error ){
+							$response->messageDraft->error = $postMessage->get_error_message();
+						} else {
+							$response->messageDraft->pixelUid = $postMessage["pixelUid"];
+							$response->messageDraft->title = $postMessage["title"];
+							$response->messageDraft->participants = $postMessage["participants"];
+							$response->messageDraft->plaintext = $text;
+						}
 					}
 
 					return $response;

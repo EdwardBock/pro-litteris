@@ -1,4 +1,4 @@
-import { Button, TextareaControl, TextControl, BaseControl } from "@wordpress/components";
+import { Button, TextareaControl, TextControl, BaseControl, Notice } from "@wordpress/components";
 import {useIsSavingPost, useIsPostDirtyState, useProLitteris} from '../hooks/use-pro-litteris.js'
 import { dateFormat } from "../utils.js";
 
@@ -16,6 +16,18 @@ const Message = ({message = {}, draft = {}, onSubmitReport})=>{
 
     const isDirtyState = useIsPostDirtyState();
     const isSaving = useIsSavingPost();
+
+    if(typeof draft.error === typeof ""){
+        return <>
+            <h3>Meldung</h3>
+            <Notice 
+                status="warning" 
+                isDismissible={false}
+                >
+                {draft.error}
+            </Notice>
+        </>
+    }
 
     if(
         typeof draft.pixelUid === typeof undefined 
