@@ -20,5 +20,6 @@ class Schedule extends _Component {
 
 	public function run(){
 		$this->plugin->repository->refillPixelPool(Options::getPixelPoolSize());
+		$this->plugin->repository->autoMessages();
 	}
 }

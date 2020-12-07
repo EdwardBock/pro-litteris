@@ -116,21 +116,21 @@ class Repository extends _Component {
 	 */
 	public function pushPostMessage( $post_id ) {
 
-		$pixel = $this->getPostPixel($post_id);
+		$pixel = $this->getPostPixel( $post_id );
 
-		if($pixel instanceof WP_Error){
+		if ( $pixel instanceof WP_Error ) {
 			return $pixel;
 		}
 
-		if(null === $pixel){
+		if ( null === $pixel ) {
 			return new WP_Error(
 				Plugin::ERROR_CODE_PUSH_MESSAGE,
 				"Could not find a pixel for post $post_id"
 			);
 		}
 
-		$isAlreadyReported = $this->database->isMessageReported($pixel->uid);
-		if($isAlreadyReported){
+		$isAlreadyReported = $this->database->isMessageReported( $pixel->uid );
+		if ( $isAlreadyReported ) {
 			return new WP_Error(
 				Plugin::ERROR_CODE_PUSH_MESSAGE,
 				"Pixel seems to be already reported: $pixel->uid"
@@ -139,7 +139,9 @@ class Repository extends _Component {
 
 		$message = $this->plugin->post->getPostMessage( $post_id );
 
-		if($message instanceof WP_Error) return $message;
+		if ( $message instanceof WP_Error ) {
+			return $message;
+		}
 
 		if ( ! MessageUtils::isMessageValid( $message ) ) {
 			return new WP_Error(
@@ -154,14 +156,33 @@ class Repository extends _Component {
 			return $response;
 		}
 
-		if($response->error instanceof WP_Error){
+		if ( $response->error instanceof WP_Error ) {
 			return $response->error;
 		}
 
-		$response->message->plaintext = $this->plugin->post->getPostText($post_id);
+		$response->message->plaintext = $this->plugin->post->getPostText( $post_id );
 
-		return $this->plugin->database->saveMessage($response->message, get_current_user_id(), $response->raw);
+		return $this->plugin->database->saveMessage( $response->message, get_current_user_id(), $response->raw );
 
+	}
+
+	/**
+	 * automatically send messages
+	 */
+	public function autoMessages() {
+
+		if ( ! defined( 'PRO_LITTERIS_AUTO_MESSAGES' ) || PRO_LITTERIS_AUTO_MESSAGES !== true ) {
+			return;
+		}
+
+		$postIds = $this->database->getPostIdsReadyForMessage();
+
+		foreach ($postIds as $postId){
+			$result = $this->pushPostMessage($postId);
+			if($result instanceof WP_Error){
+				error_log($result->get_error_message());
+			}
+		}
 	}
 
 }

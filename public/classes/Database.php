@@ -156,6 +156,22 @@ class Database {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getPostIdsReadyForMessage(){
+		return $this->wpdb->get_col( 'SELECT p.ID from '.$this->wpdb->posts.' as p
+			LEFT JOIN '.$this->wpdb->usermeta.' as u ON ( p.post_author = u.user_id AND u.meta_key = "'.Plugin::USER_META_PRO_LITTERIS_ID.'" )
+			WHERE
+			p.ID IN (
+				SELECT post_id from '.$this->table.' as pool WHERE uid NOT IN (
+					SELECT pixel_uid FROM '.$this->tableMessages.'
+				) AND post_id IS NOT NULL
+			)
+			AND p.post_status = "publish"
+			AND u.meta_value IS NOT NULL');
+	}
+
+	/**
 	 * @param string $response
 	 *
 	 * @param string $message
