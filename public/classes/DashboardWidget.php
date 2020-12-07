@@ -26,6 +26,24 @@ class DashboardWidget extends _Component {
 			$this->plugin->repository->refillPixelPool(Options::getPixelPoolSize());
 		}
 
+		$postIds = $this->plugin->repository->database->getPostIdsReadyForMessage();
+		if(count($postIds) > 0 ){
+			printf("<p>%s</p>", __("Posts will be reported on next cron schedule:", Plugin::DOMAIN));
+			echo "<ul>";
+			foreach ($postIds as $i =>  $postId){
+				printf("<li><a href='%s'>%s</a></li>", get_edit_post_link($postId), get_the_title($postId));
+				if($i > 9){
+					echo "<li>…</li>";
+					break;
+				}
+			}
+			echo "</ul>";
+		} else {
+			printf("<p>%s</p>", __("All posts in question are reported."));
+		}
+
+		echo "<hr />";
+
 		$aspired = Options::getPixelPoolSize();
 		$size = $this->plugin->database->countAvailablePixels();
 		printf("<p>%s</p>", sprintf(__("%d/%d pixels available in pool.", Plugin::DOMAIN), $size, $aspired));

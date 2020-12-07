@@ -6,6 +6,8 @@
  * Version: 1.2.1
  * Author: Palasthotel <rezeption@palasthotel.de> (Edward Bock)
  * Author URI: https://palasthotel.de
+ * Text Domain: pro-litteris
+ * Domain Path: /languages
  */
 
 namespace Palasthotel\ProLitteris;

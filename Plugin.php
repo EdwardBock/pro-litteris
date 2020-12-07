@@ -9,6 +9,7 @@
  * Tested up to:      X.X.X
  * Author:            PALASTHOTEL by Edward
  * Author URI:        http://www.palasthotel.de
+ * Text Domain:       pro-litteris
  * Domain Path:       /plugin/languages
  */
 
