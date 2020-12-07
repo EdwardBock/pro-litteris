@@ -39,7 +39,7 @@ class DashboardWidget extends _Component {
 			}
 			echo "</ul>";
 		} else {
-			printf("<p>%s</p>", __("All posts in question are reported."));
+			printf("<p>%s</p>", __("All posts in question are reported.", Plugin::DOMAIN));
 		}
 
 		echo "<hr />";
