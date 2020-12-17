@@ -88,6 +88,8 @@ class Plugin {
 	const ERROR_CODE_ASSIGN_PIXEL = 'pro-litteris-assigned-pixel';
 	const ERROR_CODE_PUSH_MESSAGE = 'pro-litteris-push-message';
 
+	const POST_META_PUSH_MESSAGE_ERROR = "_pro-litteris-push-message-error";
+
 	/**
 	 * rest fields
 	 */

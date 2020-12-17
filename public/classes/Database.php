@@ -167,6 +167,10 @@ class Database {
 					SELECT pixel_uid FROM '.$this->tableMessages.'
 				) AND post_id IS NOT NULL
 			)
+			AND
+			p.ID NOT IN (
+				SELECT post_id FROM '.$this->wpdb->postmeta.' WHERE meta_key = "'.Plugin::POST_META_PUSH_MESSAGE_ERROR.'"
+			)
 			AND p.post_status = "publish"
 			AND u.meta_value IS NOT NULL');
 	}

@@ -12,7 +12,7 @@ const Pixel = ({pixel = {}})=>{
     />
 }
 
-const Message = ({message = {}, draft = {}, onSubmitReport})=>{
+const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
 
     const isDirtyState = useIsPostDirtyState();
     const isSaving = useIsSavingPost();
@@ -85,6 +85,8 @@ const Message = ({message = {}, draft = {}, onSubmitReport})=>{
                 )}
             </ul>
         </BaseControl>
+
+        {pushError && <p style={{color: '#C62828'}}>{pushError}</p>}
         
         {isReported ? 
             <>
@@ -101,6 +103,8 @@ const Message = ({message = {}, draft = {}, onSubmitReport})=>{
                 Jetzt melden
             </Button>
         }
+
+        
     </>
 }
 
@@ -131,6 +135,7 @@ const Plugin = ()=>{
         <Message 
             message={state.message} 
             draft={state.messageDraft} 
+            pushError={state.pushError}
             onSubmitReport={()=>{
                 submitMessage();
             }}

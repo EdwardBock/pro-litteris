@@ -59,6 +59,24 @@ class CLI {
 		\WP_CLI::success( "Added $result pixel to pixel pool!" );
 	}
 
+	/**
+	 * Report contents
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp pro-litteris reportContents
+	 *
+	 * @when after_wp_load
+	 */
+	public function reportContents($args, $assoc_args){
+
+		\WP_CLI::log( "report it" );
+		Plugin::instance()->repository->autoMessages();
+
+		\WP_CLI::success( "Reported!" );
+
+	}
+
 }
 
 

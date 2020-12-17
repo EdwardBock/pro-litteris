@@ -75,6 +75,11 @@ class WP_REST extends _Component {
 						}
 					}
 
+					$pushError = get_post_meta($postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, true);
+					if(false !== $pushError && !empty($pushError)){
+						$response->pushError = $pushError;
+					}
+
 					return $response;
 				},
 				'update_callback'     => function ( $value, $post ) {

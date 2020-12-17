@@ -178,9 +178,13 @@ class Repository extends _Component {
 		$postIds = $this->database->getPostIdsReadyForMessage();
 
 		foreach ($postIds as $postId){
+			$error = get_post_meta($postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, true);
+			if(!empty($error) ) continue;
+
 			$result = $this->pushPostMessage($postId);
 			if($result instanceof WP_Error){
 				error_log($result->get_error_message());
+				update_post_meta( $postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, $result->get_error_message() );
 			}
 		}
 	}
