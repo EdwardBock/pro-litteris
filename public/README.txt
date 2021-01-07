@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
-Tested up to: 5.5.3
-Stable tag: 1.2.1
+Tested up to: 5.6
+Stable tag: 1.2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -28,6 +28,9 @@ Integrate ProLitteris into your wordpress.
 
 
 == Changelog ==
+
+= 1.2.2 =
+* Bugfix: Gutenberg script was enqueued even if no rest endpoint for post type existed
 
 = 1.2.1 =
 * Feature: Migrate support
