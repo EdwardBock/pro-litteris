@@ -86,7 +86,7 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
             </ul>
         </BaseControl>
 
-        {pushError && <p style={{color: '#C62828'}}>{pushError}</p>}
+        {pushError && !isReported && <p style={{color: '#C62828'}}>{pushError}</p>}
         
         {isReported ? 
             <>
