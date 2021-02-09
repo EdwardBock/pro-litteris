@@ -167,11 +167,18 @@ class Repository extends _Component {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isAutoMessagesEnabled(){
+		return defined( 'PRO_LITTERIS_AUTO_MESSAGES' ) && PRO_LITTERIS_AUTO_MESSAGES === true;
+	}
+
+	/**
 	 * automatically send messages
 	 */
 	public function autoMessages() {
 
-		if ( ! defined( 'PRO_LITTERIS_AUTO_MESSAGES' ) || PRO_LITTERIS_AUTO_MESSAGES !== true ) {
+		if ( ! $this->isAutoMessagesEnabled() ) {
 			return;
 		}
 
