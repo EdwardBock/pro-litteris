@@ -156,9 +156,15 @@ class Database {
 	}
 
 	/**
+	 *
+	 * @param int $year
+	 *
 	 * @return array
 	 */
-	public function getPostIdsReadyForMessage(){
+	public function getPostIdsReadyForMessage($year = -1){
+		if($year > 0){
+			$year = " AND YEAR(post_date) = ".intval($year);
+		}
 		return $this->wpdb->get_col( 'SELECT p.ID from '.$this->wpdb->posts.' as p
 			LEFT JOIN '.$this->wpdb->usermeta.' as u ON ( p.post_author = u.user_id AND u.meta_key = "'.Plugin::USER_META_PRO_LITTERIS_ID.'" )
 			WHERE
@@ -172,7 +178,7 @@ class Database {
 				SELECT post_id FROM '.$this->wpdb->postmeta.' WHERE meta_key = "'.Plugin::POST_META_PUSH_MESSAGE_ERROR.'"
 			)
 			AND p.post_status = "publish"
-			AND u.meta_value IS NOT NULL');
+			AND u.meta_value IS NOT NULL '.$year);
 	}
 
 	/**

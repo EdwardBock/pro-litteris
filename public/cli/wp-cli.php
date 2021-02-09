@@ -62,18 +62,35 @@ class CLI {
 	/**
 	 * Report contents
 	 *
+	 * ## OPTIONS
+	 *
+	 * <year>
+	 * : Which year to report
+	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp pro-litteris reportContents
+	 *     wp pro-litteris reportContents 2020
 	 *
 	 * @when after_wp_load
 	 */
 	public function reportContents($args, $assoc_args){
 
-		\WP_CLI::log( "report it" );
-		Plugin::instance()->repository->autoMessages();
+		list( $year ) = $args;
 
-		\WP_CLI::success( "Reported!" );
+		\WP_CLI::log( "report year $year" );
+		$plugin = Plugin::instance();
+		$postIds = $plugin->database->getPostIdsReadyForMessage($year);
+		$progress = \WP_CLI\Utils\make_progress_bar( 'Reporting', count($postIds) );
+		$success =  0;
+		foreach ($postIds as $postId){
+			if(!WP_DEBUG){
+				$plugin->repository->reportPost($postId);
+			}
+			$success++;
+			$progress->tick();
+		}
+		$error = $success - count($postIds);
+		\WP_CLI::success( "Reporting year $year done! $success successfull, $error errored." );
 
 	}
 
