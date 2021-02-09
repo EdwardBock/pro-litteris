@@ -77,6 +77,13 @@ class CLI {
 
 		list( $year ) = $args;
 
+		$year = intval($year);
+
+		if($year <= 1970){
+			\WP_CLI::error("Please use a year after 1970");
+			return;
+		}
+
 		\WP_CLI::log( "report year $year" );
 		$plugin = Plugin::instance();
 		$postIds = $plugin->database->getPostIdsReadyForMessage($year);
