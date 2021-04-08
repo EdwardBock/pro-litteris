@@ -30,11 +30,5 @@ export const useImages = ()=>{
         ...new Set([...validImageBlocks.map(b=>b.attributes.id), ...flatten(validGalleryBlocks.map(b=>b.attributes.ids))]),
     ];
 
-    //const images = [...validImageBlocks.map(b=>b.attributes), ...flatten(validGalleryBlocks.map(b=>b.attributes.images))];
-
-    const images = useAttachmentRecords(imageIds) ?? [];
-
-    console.debug("images", images)
-
-    return images;
+    return useAttachmentRecords(imageIds) ?? [];
 }

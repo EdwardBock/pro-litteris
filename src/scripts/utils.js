@@ -5,5 +5,23 @@ export const dateFormat = (timestamp) =>{
     return date( settings.formats.datetime , timestamp);
 }
 
-export const filterAuthors = (participants) => participants.filter(p => p.participation === "AUTHOR");
-export const filterImageOriginators = (participants) => participants.filter(p => p.participation === "IMAGE_ORIGINATOR");
+export const isAuthor = (participant) => participant.participation === "AUTHOR";
+export const isImageOriginator = (participant) => participant.participation === "IMAGE_ORIGINATOR";
+
+export const filterAuthors = (participants) => participants.filter(isAuthor);
+export const filterImageOriginators = (participants) => participants.filter(isImageOriginator);
+
+export const filterImagesByParticipant = (images, participant) => {
+    return images.filter(image => parseInt(image.author) === parseInt(participant.internalIdentification));
+}
+
+export const filterImagesWithoutParticipant = (images, participants) => {
+    const without = [];
+    for(const image of images){
+        const p = participants.filter(p=> parseInt(p.internalIdentification) === parseInt(image.author));
+        if(p.length === 0){
+            without.push(image);
+        }
+    }
+    return without;
+}
