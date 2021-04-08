@@ -151,6 +151,7 @@ class Database {
 		$message->plaintext = $row->plaintext;
 		$message->reported = $row->reported;
 		$message->participants = json_decode($row->participants);
+		$message->response = null != $row->response ? json_decode($row->response, true) : null;
 
 		return $message;
 	}

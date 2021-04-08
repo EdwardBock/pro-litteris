@@ -27,6 +27,11 @@ class Message {
 	 */
 	var $reported = null;
 
+	/**
+	 * @var null|array
+	 */
+	var $response = null;
+
 	public function __construct(string $pixelUid) {
 		$this->pixelUid = $pixelUid;
 	}

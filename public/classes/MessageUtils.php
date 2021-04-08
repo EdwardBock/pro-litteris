@@ -9,14 +9,14 @@ class MessageUtils {
 	/**
 	 * @param string $memberId
 	 * @param string $internalIdentification
-	 * @param string $participation AUTHOR || TRANSLATOR
+	 * @param string $participation AUTHOR || TRANSLATOR || IMAGE_ORIGINATOR
 	 * @param null|string $firstName
 	 * @param null|string $surName
 	 *
 	 * @return array
 	 */
 	public static function buildParticipant($memberId, $internalIdentification, $participation, $firstName, $surName ){
-		$participation = ($participation == "AUTHOR" || $participation == "TRANSLATOR")? $participation: "AUTHOR";
+		$participation = ($participation == "AUTHOR" || $participation == "TRANSLATOR" || $participation == "IMAGE_ORIGINATOR")? $participation: "AUTHOR";
 
 		return array(
 			"memberId" => $memberId,

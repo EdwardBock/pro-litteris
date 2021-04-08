@@ -1,7 +1,6 @@
 import { Button, TextareaControl, TextControl, BaseControl, Notice } from "@wordpress/components";
 import {useIsSavingPost, useIsPostDirtyState, useProLitteris} from '../hooks/use-pro-litteris.js'
-import { dateFormat } from "../utils.js";
-
+import {dateFormat, filterAuthors, filterImageOriginators} from "../utils.js";
 
 const Pixel = ({pixel = {}})=>{
     const {url} = pixel;
@@ -36,7 +35,7 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
         return null;
     }
 
-    const isReported = typeof message.reported !== typeof undefined;
+    const isReported = typeof message.reported !== typeof undefined && null !== message.reported;
 
     const {
         pixelUid,
@@ -70,8 +69,31 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
                 margin: 0,
                 marginBottom: 20,
             }}>
-                {participants.map(p=>
+                {filterAuthors(participants).map(p=>
                     <li 
+                        style={{
+                            background:'#efefef',
+                            borderRadius: 4,
+                            padding: "6px 10px",
+                            border: "1px solid #757575"
+                        }}
+                        key={p.memberId}
+                    >
+                        <Participant {...p}/>
+                    </li>
+                )}
+            </ul>
+        </BaseControl>
+        <BaseControl
+            label="Bilder"
+        >
+            <ul style={{
+                listStylePosition: 'inside',
+                margin: 0,
+                marginBottom: 20,
+            }}>
+                {filterImageOriginators(participants).map(p=>
+                    <li
                         style={{
                             background:'#efefef',
                             borderRadius: 4,
@@ -104,7 +126,6 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
             </Button>
         }
 
-        
     </>
 }
 
