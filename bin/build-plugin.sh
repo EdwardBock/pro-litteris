@@ -13,8 +13,13 @@ echo "Syncing files..."
 rsync -rL "$PROJECT_PATH/public/" "$DEST_PATH/"
 
 echo "Cleanup files..."
-rm "$DEST_PATH/composer.json"
-rm "$DEST_PATH/composer.lock"
+cd "$DEST_PATH"
+composer install
+composer update
+composer dump-autoload
+rm composer.json
+rm composer.lock
+cd "$PROJECT_PATH"
 
 echo "Generating zip file..."
 cd "$BUILD_PATH" || exit
