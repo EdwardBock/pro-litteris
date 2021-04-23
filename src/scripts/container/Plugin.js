@@ -21,7 +21,7 @@ const Pixel = ({pixel = {}})=>{
 
 const Image = ({image, style})=>{
     return <div key={image.id} style={style}>
-        <a href={`http://zen.local:8080/wp-admin/post.php?post=${image.id}&action=edit`} target="_blank">
+        <a href={`/wp-admin/post.php?post=${image.id}&action=edit`} target="_blank">
             <Dashicon icon="external" />
         </a>
         {image.caption.raw || image.title.raw}
@@ -76,6 +76,9 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
         plaintext,
         participants,
     } = message.pixelUid ? message : draft;
+
+    console.debug(message);
+    console.debug(images);
 
     return <>
         <h3>Meldung</h3>

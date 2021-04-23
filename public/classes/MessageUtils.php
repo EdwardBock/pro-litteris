@@ -6,6 +6,8 @@ namespace Palasthotel\ProLitteris;
 
 class MessageUtils {
 
+	const PARTICIPATIONS = [ "AUTHOR", "TRANSLATOR", "IMAGE_ORIGINATOR" ];
+
 	/**
 	 * @param string $memberId
 	 * @param string $internalIdentification
@@ -15,15 +17,15 @@ class MessageUtils {
 	 *
 	 * @return array
 	 */
-	public static function buildParticipant($memberId, $internalIdentification, $participation, $firstName, $surName ){
-		$participation = ($participation == "AUTHOR" || $participation == "TRANSLATOR" || $participation == "IMAGE_ORIGINATOR")? $participation: "AUTHOR";
+	public static function buildParticipant( $memberId, $internalIdentification, $participation, $firstName, $surName ) {
+		$participation = ( in_array( $participation, self::PARTICIPATIONS ) ) ? $participation : self::PARTICIPATIONS[0];
 
 		return array(
-			"memberId" => $memberId,
+			"memberId"               => $memberId,
 			"internalIdentification" => $internalIdentification,
-			"participation" => $participation,
-			"firstName" => $firstName,
-			"surName" => $surName
+			"participation"          => $participation,
+			"firstName"              => $firstName,
+			"surName"                => $surName
 		);
 	}
 
@@ -35,14 +37,14 @@ class MessageUtils {
 	 *
 	 * @return array
 	 */
-	public static function buildMessage($title, $plainTextBase64Encoded, $participants, $pixelUid){
+	public static function buildMessage( $title, $plainTextBase64Encoded, $participants, $pixelUid ) {
 		return array(
-			"title" => $title,
-			"messageText"=> array(
+			"title"        => $title,
+			"messageText"  => array(
 				"plainText" => $plainTextBase64Encoded,
 			),
 			"participants" => $participants,
-			"pixelUid" => $pixelUid
+			"pixelUid"     => $pixelUid
 		);
 	}
 
@@ -51,26 +53,38 @@ class MessageUtils {
 	 *
 	 * @return bool
 	 */
-	public static function isMessageValid($message){
+	public static function isMessageValid( $message ) {
 
-		if(!is_array($message)) return false;
+		if ( ! is_array( $message ) ) {
+			return false;
+		}
 
-		if(!isset($message["title"]) || empty($message["title"])) return false;
+		if ( ! isset( $message["title"] ) || empty( $message["title"] ) ) {
+			return false;
+		}
 
-		if(
-			!isset($message["messageText"]) || !is_array($message["messageText"])
+		if (
+			! isset( $message["messageText"] ) || ! is_array( $message["messageText"] )
 			||
-			!isset($message["messageText"]["plainText"]) || empty($message["messageText"]["plainText"])
+			! isset( $message["messageText"]["plainText"] ) || empty( $message["messageText"]["plainText"] )
 			||
-			strlen( base64_decode($message["messageText"]["plainText"]) ) < Options::getMinCharCount()
-		) return false;
+			strlen( base64_decode( $message["messageText"]["plainText"] ) ) < Options::getMinCharCount()
+		) {
+			return false;
+		}
 
-		if(!isset($message["pixelUid"]) || empty($message["pixelUid"])) return false;
+		if ( ! isset( $message["pixelUid"] ) || empty( $message["pixelUid"] ) ) {
+			return false;
+		}
 
-		if(!isset($message["participants"]) || !is_array($message["participants"]) || count($message["participants"]) == 0) return false;
+		if ( ! isset( $message["participants"] ) || ! is_array( $message["participants"] ) || count( $message["participants"] ) == 0 ) {
+			return false;
+		}
 
-		foreach ($message["participants"] as $participant){
-			if(!self::isParticipantValid($participant)) return false;
+		foreach ( $message["participants"] as $participant ) {
+			if ( ! self::isParticipantValid( $participant ) ) {
+				return false;
+			}
 		}
 
 		return true;
@@ -81,18 +95,28 @@ class MessageUtils {
 	 *
 	 * @return bool
 	 */
-	public static function isParticipantValid($participant){
+	public static function isParticipantValid( $participant ) {
 
-		if(!isset($participant["memberId"]) || empty($participant["memberId"])) return false;
-		if(!isset($participant["internalIdentification"]) || empty($participant["internalIdentification"])) return false;
-		if(
-			!isset($participant["participation"])
+		if ( ! isset( $participant["memberId"] ) || empty( $participant["memberId"] ) ) {
+			return false;
+		}
+		if ( ! isset( $participant["internalIdentification"] ) || empty( $participant["internalIdentification"] ) ) {
+			return false;
+		}
+		if (
+			! isset( $participant["participation"] )
 			||
-			($participant["participation"] != "AUTHOR" && $participant["participation"] != "TRANSLATOR")
-		) return false;
+			( ! in_array( $participant["participation"], self::PARTICIPATIONS ) )
+		) {
+			return false;
+		}
 
-		if(!isset($participant["firstName"]) || empty($participant["firstName"])) return false;
-		if(!isset($participant["surName"]) || empty($participant["surName"])) return false;
+		if ( ! isset( $participant["firstName"] ) || empty( $participant["firstName"] ) ) {
+			return false;
+		}
+		if ( ! isset( $participant["surName"] ) || empty( $participant["surName"] ) ) {
+			return false;
+		}
 
 		return true;
 	}

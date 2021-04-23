@@ -86,10 +86,13 @@ class Post extends _Component {
 				}
 			}
 			$imageAuthorIds = array_map(function($id){
-				return get_post_field("post_author", $id);
+				return $this->plugin->media->getAuthor($id);
 			}, array_unique($ids));
 
 			foreach ( array_unique($imageAuthorIds) as $author){
+
+				if(empty($author)) continue;
+
 				$participant = $this->getParticipant($author, "IMAGE_ORIGINATOR");
 				if(is_array($participant)){
 					$participants[] = $participant;

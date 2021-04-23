@@ -97,6 +97,19 @@ class WP_REST extends _Component {
 				},
 			]
 		);
+
+		register_rest_field(
+			"attachment",
+			Plugin::REST_FIELD_ATTACHMENT_AUTHOR,
+			[
+				'get_callback'        => function ( $post ) {
+					return $this->plugin->media->getAuthor( $post["id"] );
+				},
+				'permission_callback' => function ( $request ) {
+					return current_user_can( 'edit_post', $request["id"] );
+				},
+			]
+		);
 	}
 
 }

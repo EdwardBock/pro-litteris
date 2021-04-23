@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8bdc2730483110d46854e95c92eaa493",
+    "content-hash": "ec63c02ce60d16854d545ccb92aa4126",
     "packages": [
         {
             "name": "html2text/html2text",
@@ -49,19 +49,18 @@
         },
         {
             "name": "palasthotel/wp-components",
-            "version": "dev-master",
+            "version": "0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/palasthotel/wp-components.git",
-                "reference": "4a33bb19f41a47f77ae0a91bfe768afd46df4e7e"
+                "reference": "664e849a134ea1549d51413da6e76eccd1bbb696"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/palasthotel/wp-components/zipball/4a33bb19f41a47f77ae0a91bfe768afd46df4e7e",
-                "reference": "4a33bb19f41a47f77ae0a91bfe768afd46df4e7e",
+                "url": "https://api.github.com/repos/palasthotel/wp-components/zipball/664e849a134ea1549d51413da6e76eccd1bbb696",
+                "reference": "664e849a134ea1549d51413da6e76eccd1bbb696",
                 "shasum": ""
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -82,18 +81,16 @@
             "description": "Provide helper components for plugin and theme development",
             "homepage": "https://palasthotel.de",
             "support": {
-                "source": "https://github.com/palasthotel/wp-components/tree/master",
+                "source": "https://github.com/palasthotel/wp-components/tree/0.0.4",
                 "issues": "https://github.com/palasthotel/wp-components/issues"
             },
-            "time": "2021-04-22T12:56:22+00:00"
+            "time": "2021-04-23T07:57:49+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "palasthotel/wp-components": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

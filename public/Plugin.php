@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
+require_once dirname( __FILE__ ) . "/vendor/autoload.php";
+
 /**
- * @property string path
- * @property string url
  * @property PostsTable postList
  * @property Post post
  * @property User user
@@ -33,8 +33,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @property Assets assets
  * @property Gutenberg gutenberg
  * @property Migrate migrate
+ * @property Media $media
  */
-class Plugin {
+class Plugin extends \Palasthotel\WordPress\Plugin {
 
 	/**
 	 * Domain for translation
@@ -89,16 +90,18 @@ class Plugin {
 	const ERROR_CODE_PUSH_MESSAGE = 'pro-litteris-push-message';
 
 	const POST_META_PUSH_MESSAGE_ERROR = "_pro-litteris-push-message-error";
+	const ATTACHMENT_META_AUTHOR = "pro_litteris_attachment_author";
 
 	/**
 	 * rest fields
 	 */
 	const REST_FIELD = "pro_litteris";
+	const REST_FIELD_ATTACHMENT_AUTHOR = "pro_litteris_author";
 
 	/**
 	 * Plugin constructor
 	 */
-	private function __construct() {
+	public function onCreate() {
 
 		/**
 		 * load translations
@@ -108,14 +111,6 @@ class Plugin {
 			false,
 			dirname( plugin_basename( __FILE__ ) ) . '/languages'
 		);
-
-		/**
-		 * Base paths
-		 */
-		$this->path = plugin_dir_path( __FILE__ );
-		$this->url  = plugin_dir_url( __FILE__ );
-
-		require_once dirname( __FILE__ ) . "/vendor/autoload.php";
 
 		// ----------------------------------------
 		// all about data
@@ -140,16 +135,11 @@ class Plugin {
 		$this->post            = new Post( $this );
 		$this->postList        = new PostsTable( $this );
 		$this->user            = new User( $this );
+		$this->media           = new Media( $this );
 		$this->pixel           = new TrackingPixel( $this );
 
-		// ----------------------------------------
-		// ----------------------------------------
-
-		register_activation_hook( __FILE__, array( $this, "activation" ) );
-		register_deactivation_hook( __FILE__, array( $this, "deactivation" ) );
-
 		if ( WP_DEBUG ) {
-			$this->database->createTable();
+			$this->database->createTables();
 		}
 	}
 
@@ -165,32 +155,10 @@ class Plugin {
 	/**
 	 * on plugin activation
 	 */
-	function activation() {
-		$this->database->createTable();;
+	function onActivation() {
+		$this->database->createTables();
 	}
 
-	/**
-	 * on plugin deactivation
-	 */
-	function deactivation() {
-	}
-
-
-	/**
-	 * @var Plugin $instance
-	 */
-	private static $instance;
-
-	/**
-	 * @return Plugin
-	 */
-	public static function instance() {
-		if ( Plugin::$instance === null ) {
-			Plugin::$instance = new Plugin();
-		}
-
-		return Plugin::$instance;
-	}
 }
 
 Plugin::instance();

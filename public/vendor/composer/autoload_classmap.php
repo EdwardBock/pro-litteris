@@ -6,25 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Palasthotel\\ProLitteris\\API' => $baseDir . '/classes/API.php',
-    'Palasthotel\\ProLitteris\\Assets' => $baseDir . '/classes/Assets.php',
-    'Palasthotel\\ProLitteris\\DashboardWidget' => $baseDir . '/classes/DashboardWidget.php',
-    'Palasthotel\\ProLitteris\\Database' => $baseDir . '/classes/Database.php',
-    'Palasthotel\\ProLitteris\\Gutenberg' => $baseDir . '/classes/Gutenberg.php',
-    'Palasthotel\\ProLitteris\\MessageUtils' => $baseDir . '/classes/MessageUtils.php',
-    'Palasthotel\\ProLitteris\\Model\\FetchPixelsResponse' => $baseDir . '/classes/Model/FetchPixelsResponse.php',
-    'Palasthotel\\ProLitteris\\Model\\Message' => $baseDir . '/classes/Model/Message.php',
-    'Palasthotel\\ProLitteris\\Model\\Pixel' => $baseDir . '/classes/Model/Pixel.php',
-    'Palasthotel\\ProLitteris\\Model\\PreventPixelAssign' => $baseDir . '/classes/Model/PreventPixelAssign.php',
-    'Palasthotel\\ProLitteris\\Model\\PushMessageResponse' => $baseDir . '/classes/Model/PushMessageResponse.php',
-    'Palasthotel\\ProLitteris\\Model\\_BaseAPIResponse' => $baseDir . '/classes/Model/_BaseAPIResponse.php',
-    'Palasthotel\\ProLitteris\\Options' => $baseDir . '/classes/Options.php',
-    'Palasthotel\\ProLitteris\\Post' => $baseDir . '/classes/Post.php',
-    'Palasthotel\\ProLitteris\\PostsTable' => $baseDir . '/classes/PostsTable.php',
-    'Palasthotel\\ProLitteris\\Repository' => $baseDir . '/classes/Repository.php',
-    'Palasthotel\\ProLitteris\\Schedule' => $baseDir . '/classes/Schedule.php',
-    'Palasthotel\\ProLitteris\\TrackingPixel' => $baseDir . '/classes/TrackingPixel.php',
-    'Palasthotel\\ProLitteris\\User' => $baseDir . '/classes/User.php',
-    'Palasthotel\\ProLitteris\\WP_REST' => $baseDir . '/classes/WP_REST.php',
-    'Palasthotel\\ProLitteris\\_Component' => $baseDir . '/classes/_Component.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );

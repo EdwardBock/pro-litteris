@@ -11,14 +11,16 @@ export const isImageOriginator = (participant) => participant.participation === 
 export const filterAuthors = (participants) => participants.filter(isAuthor);
 export const filterImageOriginators = (participants) => participants.filter(isImageOriginator);
 
+export const isImageAuthor = (participant, image) => parseInt(participant.internalIdentification) === parseInt(image.pro_litteris_author);
+
 export const filterImagesByParticipant = (images, participant) => {
-    return images.filter(image => parseInt(image.author) === parseInt(participant.internalIdentification));
+    return images.filter(image => isImageAuthor(participant, image));
 }
 
 export const filterImagesWithoutParticipant = (images, participants) => {
     const without = [];
     for(const image of images){
-        const p = participants.filter(p=> parseInt(p.internalIdentification) === parseInt(image.author));
+        const p = participants.filter(p=> isImageAuthor(p,image));
         if(p.length === 0){
             without.push(image);
         }

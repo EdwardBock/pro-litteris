@@ -5,25 +5,18 @@ namespace Palasthotel\ProLitteris;
 
 use Palasthotel\ProLitteris\Model\Message;
 use Palasthotel\ProLitteris\Model\Pixel;
-use wpdb;
 
 /**
- * @property wpdb $wpdb
  * @property string table
  * @property string tableResponses
  * @property string $tableMessages
  */
-class Database {
+class Database extends \Palasthotel\WordPress\Database {
 
-	/**
-	 * Database constructor.
-	 */
-	public function __construct() {
-		global $wpdb;
-		$this->wpdb           = $wpdb;
-		$this->table          = $wpdb->prefix . "pro_litteris_pixel_pool";
-		$this->tableMessages  = $wpdb->prefix . "pro_litteris_messages";
-		$this->tableResponses = $wpdb->prefix . "pro_litteris_api_responses";
+	public function init() {
+		$this->table          = $this->wpdb->prefix . "pro_litteris_pixel_pool";
+		$this->tableMessages  = $this->wpdb->prefix . "pro_litteris_messages";
+		$this->tableResponses = $this->wpdb->prefix . "pro_litteris_api_responses";
 	}
 
 	/**
@@ -206,8 +199,8 @@ class Database {
 	/**
 	 * create tables if they do not exist
 	 */
-	function createTable() {
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	function createTables() {
+		parent::createTables();
 
 		\dbDelta( "CREATE TABLE IF NOT EXISTS $this->table
 			(
