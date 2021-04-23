@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14f5aa6a3a63203e91b5ade791a74a52",
+    "content-hash": "8bdc2730483110d46854e95c92eaa493",
     "packages": [
         {
             "name": "html2text/html2text",
@@ -41,15 +41,62 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Converts HTML to formatted plain text",
+            "support": {
+                "issues": "https://github.com/mtibben/html2text/issues",
+                "source": "https://github.com/mtibben/html2text/tree/4.3.1"
+            },
             "time": "2020-04-16T23:44:31+00:00"
+        },
+        {
+            "name": "palasthotel/wp-components",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palasthotel/wp-components.git",
+                "reference": "4a33bb19f41a47f77ae0a91bfe768afd46df4e7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palasthotel/wp-components/zipball/4a33bb19f41a47f77ae0a91bfe768afd46df4e7e",
+                "reference": "4a33bb19f41a47f77ae0a91bfe768afd46df4e7e",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Palasthotel\\WordPress\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Bock",
+                    "email": "edward.bock@palasthotel.de",
+                    "homepage": "http://edwardbock.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provide helper components for plugin and theme development",
+            "homepage": "https://palasthotel.de",
+            "support": {
+                "source": "https://github.com/palasthotel/wp-components/tree/master",
+                "issues": "https://github.com/palasthotel/wp-components/issues"
+            },
+            "time": "2021-04-22T12:56:22+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "palasthotel/wp-components": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
