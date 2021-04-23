@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
-Tested up to: 5.7
-Stable tag: 1.2.2
+Tested up to: 5.7.1
+Stable tag: 1.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
