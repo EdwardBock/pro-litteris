@@ -29,6 +29,10 @@ Integrate ProLitteris into your wordpress.
 
 == Changelog ==
 
+= 1.2.4 =
+* Optimization: place referrer meta tag in header
+* Bugfix: database year -1 breaks query
+
 = 1.2.3 =
 * Feature: Add image authorship to ProLitteris reporting.
 

@@ -13,6 +13,7 @@ class TrackingPixel extends _Component {
 
 	public function onCreate() {
 		parent::onCreate();
+		add_action('wp_head', [$this, 'head']);
 		add_filter( 'the_content', array( $this, 'add_pixel' ) );
 		add_action( 'amp_post_template_footer', array( $this, 'amp_post_template_footer' ) );
 	}
@@ -41,6 +42,13 @@ class TrackingPixel extends _Component {
 	 */
 	private function isAmp() {
 		return ( function_exists( 'is_amp_endpoint' ) && is_single() && is_amp_endpoint() );
+	}
+
+	public function head(){
+		?>
+		<!-- pro-litteris -->
+		<meta name="referrer" content="no-referrer-when-downgrade">
+		<?php
 	}
 
 	/**
