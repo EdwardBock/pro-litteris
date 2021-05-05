@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'fa8214ef7d939e863d0e7cb5f98d048c95897926',
+    'reference' => 'baf5185879daff44fbc53de0cae6c47f6ab5c41a',
     'name' => 'palasthotel/pro-litteris',
   ),
   'versions' => 
@@ -27,16 +27,16 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'fa8214ef7d939e863d0e7cb5f98d048c95897926',
+      'reference' => 'baf5185879daff44fbc53de0cae6c47f6ab5c41a',
     ),
     'palasthotel/wp-components' => 
     array (
-      'pretty_version' => '0.0.4',
-      'version' => '0.0.4.0',
+      'pretty_version' => '0.0.8',
+      'version' => '0.0.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => '664e849a134ea1549d51413da6e76eccd1bbb696',
+      'reference' => '32b415345c5e3d7f50897e5db650093039dc1f00',
     ),
   ),
 );

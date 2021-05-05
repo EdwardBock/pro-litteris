@@ -155,7 +155,7 @@ class Plugin extends \Palasthotel\WordPress\Plugin {
 	/**
 	 * on plugin activation
 	 */
-	function onActivation() {
+	function onSiteActivation() {
 		$this->database->createTables();
 	}
 
