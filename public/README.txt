@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
-Tested up to: 5.7.1
-Stable tag: 1.2.3
+Tested up to: 5.7.2
+Stable tag: 1.2.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -28,6 +28,9 @@ Integrate ProLitteris into your wordpress.
 
 
 == Changelog ==
+
+= 1.2.5 =
+* Optimization: Push message error logging
 
 = 1.2.4 =
 * Optimization: place referrer meta tag in header

@@ -3,7 +3,7 @@
 /**
  * Plugin Name: ProLitteris
  * Description: Integration of prolitteris.ch services.
- * Version: 1.2.2
+ * Version: 1.2.5
  * Author: Palasthotel <rezeption@palasthotel.de> (Edward Bock)
  * Author URI: https://palasthotel.de
  * Text Domain: pro-litteris
@@ -90,6 +90,7 @@ class Plugin extends \Palasthotel\WordPress\Plugin {
 	const ERROR_CODE_PUSH_MESSAGE = 'pro-litteris-push-message';
 
 	const POST_META_PUSH_MESSAGE_ERROR = "_pro-litteris-push-message-error";
+	const POST_META_PUSH_MESSAGE_ERROR_DATA = "_pro-litteris-push-message-error-data";
 	const ATTACHMENT_META_AUTHOR = "pro_litteris_attachment_author";
 
 	/**

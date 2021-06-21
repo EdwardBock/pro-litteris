@@ -78,6 +78,7 @@ class WP_REST extends _Component {
 					$pushError = get_post_meta($postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, true);
 					if(false !== $pushError && !empty($pushError)){
 						$response->pushError = $pushError;
+						$response->pushErrorData = get_post_meta($postId, Plugin::POST_META_PUSH_MESSAGE_ERROR_DATA, true);
 					}
 
 					return $response;
@@ -89,7 +90,7 @@ class WP_REST extends _Component {
 					} // there is nothing to change for us
 
 					if(isset($value["pushMessage"])){
-						$this->plugin->repository->pushPostMessage($post->ID);
+						$this->plugin->repository->reportPost($post->ID, true);
 					}
 				},
 				'permission_callback' => function ( $request ) {

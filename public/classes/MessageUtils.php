@@ -51,16 +51,16 @@ class MessageUtils {
 	/**
 	 * @param array $message
 	 *
-	 * @return bool
+	 * @return true|\WP_Error
 	 */
 	public static function isMessageValid( $message ) {
 
 		if ( ! is_array( $message ) ) {
-			return false;
+			return new \WP_Error(400,"Message is not an array", $message);
 		}
 
 		if ( ! isset( $message["title"] ) || empty( $message["title"] ) ) {
-			return false;
+			return new \WP_Error(400,"Message has no or empty title", $message);
 		}
 
 		if (
@@ -70,20 +70,20 @@ class MessageUtils {
 			||
 			strlen( base64_decode( $message["messageText"]["plainText"] ) ) < Options::getMinCharCount()
 		) {
-			return false;
+			return new \WP_Error(400,"Message text is not valid",$message);
 		}
 
 		if ( ! isset( $message["pixelUid"] ) || empty( $message["pixelUid"] ) ) {
-			return false;
+			return new \WP_Error(400,"Message pixelUid is missing or empty",$message);
 		}
 
 		if ( ! isset( $message["participants"] ) || ! is_array( $message["participants"] ) || count( $message["participants"] ) == 0 ) {
-			return false;
+			return new \WP_Error(400,"Message participants are missing",$message);
 		}
 
 		foreach ( $message["participants"] as $participant ) {
 			if ( ! self::isParticipantValid( $participant ) ) {
-				return false;
+				return new \WP_Error(400,"Message invalid participants",$message);
 			}
 		}
 

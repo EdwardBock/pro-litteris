@@ -169,7 +169,7 @@ class Repository extends _Component {
 	/**
 	 * @return bool
 	 */
-	public function isAutoMessagesEnabled(){
+	public function isAutoMessagesEnabled() {
 		return defined( 'PRO_LITTERIS_AUTO_MESSAGES' ) && PRO_LITTERIS_AUTO_MESSAGES === true;
 	}
 
@@ -181,26 +181,32 @@ class Repository extends _Component {
 			return;
 		}
 		$postIds = $this->database->getPostIdsReadyForMessage();
-		foreach ($postIds as $postId){
-			$this->reportPost($postId);
+		foreach ( $postIds as $postId ) {
+			$this->reportPost( $postId );
 		}
 	}
 
 	/**
 	 * @param $postId
+	 * @param bool $force
 	 *
 	 * @return bool
 	 */
-	public function reportPost($postId){
-		$error = get_post_meta($postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, true);
-		if(!empty($error) ) return false;
-
-		$result = $this->pushPostMessage($postId);
-		if($result instanceof WP_Error){
-			error_log($result->get_error_message());
-			update_post_meta( $postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, $result->get_error_message() );
+	public function reportPost( $postId, $force = false ) {
+		$error = get_post_meta( $postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, true );
+		if ( !$force && ! empty( $error ) ) {
 			return false;
 		}
+
+		$result = $this->pushPostMessage( $postId );
+		if ( $result instanceof WP_Error ) {
+			error_log( $result->get_error_message() );
+			update_post_meta( $postId, Plugin::POST_META_PUSH_MESSAGE_ERROR, $result->get_error_message() );
+			update_post_meta( $postId, Plugin::POST_META_PUSH_MESSAGE_ERROR_DATA, $result->get_error_data() );
+
+			return false;
+		}
+
 		return true;
 	}
 
