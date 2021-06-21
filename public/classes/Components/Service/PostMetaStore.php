@@ -1,9 +1,12 @@
 <?php
 
 
-namespace Palasthotel\WordPress\Service;
+namespace Palasthotel\ProLitteris\Components\Service;
 
-
+/**
+ * Class PostMetaStore
+ * @version 0.1.1
+ */
 class PostMetaStore implements StoreInterface {
 
 	private $metaKey;

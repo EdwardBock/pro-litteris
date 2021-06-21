@@ -3,8 +3,8 @@
 
 namespace Palasthotel\ProLitteris;
 
-use Palasthotel\WordPress\Attachment\SelectMetaField;
-use Palasthotel\WordPress\Model\Option;
+use Palasthotel\ProLitteris\Components\Attachment\SelectMetaField;
+use Palasthotel\ProLitteris\Components\Model\Option;
 use WP_User;
 
 class Media extends _Component {

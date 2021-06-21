@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70a3aaa895ce5e55092e9aede94228c9",
+    "content-hash": "8e1fd364f266b55f78a2429934e676c9",
     "packages": [
         {
             "name": "html2text/html2text",
@@ -46,45 +46,6 @@
                 "source": "https://github.com/mtibben/html2text/tree/4.3.1"
             },
             "time": "2020-04-16T23:44:31+00:00"
-        },
-        {
-            "name": "palasthotel/wp-components",
-            "version": "0.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/palasthotel/wp-components.git",
-                "reference": "32b415345c5e3d7f50897e5db650093039dc1f00"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/palasthotel/wp-components/zipball/32b415345c5e3d7f50897e5db650093039dc1f00",
-                "reference": "32b415345c5e3d7f50897e5db650093039dc1f00",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Palasthotel\\WordPress\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Edward Bock",
-                    "email": "edward.bock@palasthotel.de",
-                    "homepage": "http://edwardbock.de",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Provide helper components for plugin and theme development",
-            "homepage": "https://palasthotel.de",
-            "support": {
-                "source": "https://github.com/palasthotel/wp-components/tree/0.0.8",
-                "issues": "https://github.com/palasthotel/wp-components/issues"
-            },
-            "time": "2021-05-04T10:41:38+00:00"
         }
     ],
     "packages-dev": [],
@@ -95,5 +56,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

@@ -9,7 +9,6 @@ class ComposerStaticInite33cb83e3a844e1cb6e891bfb7fa236c
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
-            'Palasthotel\\WordPress\\' => 22,
             'Palasthotel\\ProLitteris\\' => 24,
         ),
         'H' => 
@@ -19,10 +18,6 @@ class ComposerStaticInite33cb83e3a844e1cb6e891bfb7fa236c
     );
 
     public static $prefixDirsPsr4 = array (
-        'Palasthotel\\WordPress\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/palasthotel/wp-components/src',
-        ),
         'Palasthotel\\ProLitteris\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',

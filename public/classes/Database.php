@@ -11,7 +11,7 @@ use Palasthotel\ProLitteris\Model\Pixel;
  * @property string tableResponses
  * @property string $tableMessages
  */
-class Database extends \Palasthotel\WordPress\Database {
+class Database extends Components\Database {
 
 	public function init() {
 		$this->table          = $this->wpdb->prefix . "pro_litteris_pixel_pool";

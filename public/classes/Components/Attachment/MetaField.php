@@ -1,13 +1,15 @@
 <?php
 
 
-namespace Palasthotel\WordPress\Attachment;
+namespace Palasthotel\ProLitteris\Components\Attachment;
 
 
-use Palasthotel\WordPress\Service\PostMetaStore;
-use Palasthotel\WordPress\Service\StoreInterface;
+use Palasthotel\ProLitteris\Components\Service\PostMetaStore;
+use Palasthotel\ProLitteris\Components\Service\StoreInterface;
 
 /**
+ * Class MetaField
+ * @version 0.1.1
  */
 abstract class MetaField {
 

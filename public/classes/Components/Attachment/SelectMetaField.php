@@ -1,11 +1,16 @@
 <?php
 
 
-namespace Palasthotel\WordPress\Attachment;
+namespace Palasthotel\ProLitteris\Components\Attachment;
 
 
-use Palasthotel\WordPress\Model\Option;
 
+use Palasthotel\ProLitteris\Components\Model\Option;
+
+/**
+ * Class SelectMetaField
+ * @version 0.1.1
+ */
 class SelectMetaField extends MetaField {
 
 	/**

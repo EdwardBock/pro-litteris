@@ -1,12 +1,13 @@
 <?php
 
 
-namespace Palasthotel\WordPress\Model;
+namespace Palasthotel\ProLitteris\Components\Model;
 
 
 /**
  * @property string value
  * @property string label
+ * @version 0.1.1
  */
 class Option {
 

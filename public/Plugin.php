@@ -13,6 +13,8 @@
 namespace Palasthotel\ProLitteris;
 
 // If this file is called directly, abort.
+use Palasthotel\ProcessLog\Component\Component;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
@@ -35,7 +37,7 @@ require_once dirname( __FILE__ ) . "/vendor/autoload.php";
  * @property Migrate migrate
  * @property Media $media
  */
-class Plugin extends \Palasthotel\WordPress\Plugin {
+class Plugin extends Components\Plugin {
 
 	/**
 	 * Domain for translation
@@ -107,10 +109,9 @@ class Plugin extends \Palasthotel\WordPress\Plugin {
 		/**
 		 * load translations
 		 */
-		load_plugin_textdomain(
+		$this->loadTextdomain(
 			Plugin::DOMAIN,
-			false,
-			dirname( plugin_basename( __FILE__ ) ) . '/languages'
+			"languages"
 		);
 
 		// ----------------------------------------

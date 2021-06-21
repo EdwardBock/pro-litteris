@@ -6,14 +6,7 @@
       "Palasthotel\\ProLitteris\\": "classes"
     }
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/palasthotel/wp-components.git"
-    }
-  ],
   "require": {
-    "html2text/html2text": "^4.3",
-    "palasthotel/wp-components": "0.0.8"
+    "html2text/html2text": "^4.3"
   }
 }
