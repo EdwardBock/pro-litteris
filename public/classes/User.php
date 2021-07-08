@@ -90,11 +90,19 @@ class User extends _Component {
 
 		if(isset($_POST[Plugin::USER_META_PRO_LITTERIS_ID]) && !empty($_POST[Plugin::USER_META_PRO_LITTERIS_ID])){
 			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_ID, intval($_POST[Plugin::USER_META_PRO_LITTERIS_ID]) );
-			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_NAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_NAME]) );
-			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_SURNAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_SURNAME]) );
 		} else {
 			delete_user_meta($user_id, Plugin::USER_META_PRO_LITTERIS_ID );
+		}
+
+		if(isset($_POST[Plugin::USER_META_PRO_LITTERIS_NAME]) && !empty($_POST[Plugin::USER_META_PRO_LITTERIS_NAME])){
+			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_NAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_NAME]) );
+		} else {
 			delete_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_NAME);
+		}
+
+		if(isset($_POST[Plugin::USER_META_PRO_LITTERIS_SURNAME]) && !empty($_POST[Plugin::USER_META_PRO_LITTERIS_SURNAME])){
+			update_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_SURNAME, sanitize_text_field($_POST[Plugin::USER_META_PRO_LITTERIS_SURNAME]) );
+		} else {
 			delete_user_meta( $user_id, Plugin::USER_META_PRO_LITTERIS_SURNAME);
 		}
 
