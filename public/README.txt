@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
 Tested up to: 5.7.2
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -28,6 +28,10 @@ Integrate ProLitteris into your wordpress.
 
 
 == Changelog ==
+
+= 1.2.6 =
+* Bugfix: User meta wont be saved
+* Performance issue fix
 
 = 1.2.5 =
 * Optimization: Push message error logging
