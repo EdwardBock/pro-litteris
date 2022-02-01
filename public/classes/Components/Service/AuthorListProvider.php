@@ -36,6 +36,7 @@ class AuthorListProvider implements ProviderInterface {
 				/**
 				 * @var WP_User $author
 				 */
+				$id = "";
 				foreach ($results as $result){
 					if($result->meta_key === $keyId && $result->user_id === $author->ID.""){
 						$id = $result->meta_value;
