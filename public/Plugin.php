@@ -3,7 +3,7 @@
 /**
  * Plugin Name: ProLitteris
  * Description: Integration of prolitteris.ch services.
- * Version: 1.2.6
+ * Version: 1.3.0
  * Author: Palasthotel <rezeption@palasthotel.de> (Edward Bock)
  * Author URI: https://palasthotel.de
  * Text Domain: pro-litteris
@@ -59,6 +59,12 @@ class Plugin extends Components\Plugin {
 	 * Schedules
 	 */
 	const SCHEDULE_REFILL_PIXEL_POOL = "pro_litteris_schedule_refill_pixel_pool";
+
+	/**
+	 * actions
+	 */
+	const ACTION_BEFORE_MESSAGE_CONTENT = "pro_litteris_before_message_content";
+	const ACTION_AFTER_MESSAGE_CONTENT = "pro_litteris_after_message_content";
 
 	/**
 	 * filters

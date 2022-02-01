@@ -22,7 +22,11 @@ class Post extends _Component {
 
 		$html    = "";
 		$excerpt = get_the_excerpt( $post_id );
+
+		do_action(Plugin::ACTION_BEFORE_MESSAGE_CONTENT, $post_id);
 		$content = apply_filters( 'the_content', $post->post_content );
+		do_action(Plugin::ACTION_AFTER_MESSAGE_CONTENT, $post_id);
+
 		if ( !empty($excerpt) && strpos( $content, $excerpt ) === false ) {
 			$html = $excerpt . $content;
 		} else {

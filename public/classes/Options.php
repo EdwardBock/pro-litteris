@@ -23,6 +23,6 @@ class Options {
 	}
 
 	public static function getMinCharCount(){
-		return intval(get_option(Plugin::OPTION_MIN_CHAR_COUNT, 2000));
+		return intval(get_option(Plugin::OPTION_MIN_CHAR_COUNT, 1500));
 	}
 }
