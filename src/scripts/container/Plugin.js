@@ -77,9 +77,6 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
         participants,
     } = message.pixelUid ? message : draft;
 
-    console.debug(message);
-    console.debug(images);
-
     return <>
         <h3>Meldung</h3>
         <TextControl
