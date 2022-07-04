@@ -84,7 +84,7 @@ class CLI {
 			return;
 		}
 
-		\WP_CLI::log( "report year $year" );
+		\WP_CLI::log( "🕐 -> Report year $year" );
 		$plugin = Plugin::instance();
 		$postIds = $plugin->database->getPostIdsReadyForMessage($year);
 		$progress = \WP_CLI\Utils\make_progress_bar( 'Reporting', count($postIds) );
