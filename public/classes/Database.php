@@ -172,7 +172,7 @@ class Database extends Components\Database {
 			p.ID NOT IN (
 				SELECT post_id FROM '.$this->wpdb->postmeta.' WHERE meta_key = "'.Plugin::POST_META_PUSH_MESSAGE_ERROR.'"
 			)
-			AND p.post_status = "publish"
+			AND p.post_status IN ( "publish", "private" )
 			AND u.meta_value IS NOT NULL '.$yearCond);
 	}
 
