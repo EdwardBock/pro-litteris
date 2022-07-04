@@ -1,6 +1,5 @@
 import flatten from "lodash/flatten";
 import {useSelect} from "@wordpress/data";
-import {useEffect, useState} from "@wordpress/element";
 
 const useBlocks = (deps = [])=> useSelect( select =>{
     const store = select('core/block-editor');
