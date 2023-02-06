@@ -84,8 +84,18 @@ class Post extends _Component {
 				if ( $block['blockName'] === 'core/image' ) {
 					$ids[] = $block["attrs"]["id"];
 				} else if ($block['blockName'] === 'core/gallery') {
-					foreach ($block["attrs"]["ids"] as $id){
-						$ids[] = $id;
+					if(isset($block["attrs"]["ids"] ) && is_array($block["attrs"]["ids"] )){
+						foreach ($block["attrs"]["ids"] as $id){
+							$ids[] = $id;
+						}
+					} else if(!empty($block["innerBlocks"]) && is_array($block["innerBlocks"])){
+						foreach ($block["innerBlocks"] as $imageBlock){
+							if("core/image" != $imageBlock["blockName"]) continue;
+							if(empty($imageBlock["attrs"]) || !is_array($imageBlock["attrs"])) continue;
+							$attrs = $imageBlock["attrs"];
+							if(!isset($attrs["id"])) continue;
+							$ids[] = intval($attrs["id"]);
+						}
 					}
 				}
 			}
