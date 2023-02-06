@@ -92,6 +92,9 @@ class CLI {
 		foreach ($postIds as $postId){
 			if(!WP_DEBUG){
 				$plugin->repository->reportPost($postId);
+				// wait for the report to really have finished (I guess on their side).
+				// else we run into error":{"code":100,"message":"Technical error (too many requests).
+				usleep(50 * 1000);
 			}
 			$success++;
 			$progress->tick();
