@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
-Tested up to: 6.1.1
-Stable tag: 1.3.1
+Tested up to: 6.2
+Stable tag: 1.3.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -28,6 +28,10 @@ Integrate ProLitteris into your wordpress.
 
 
 == Changelog ==
+
+= 1.3.2 =
+* Bugfix: Ignore invalid user id as participants
+* Update: packages
 
 = 1.3.1 =
 * Images from gallery blocks with innerBlock images are detected
