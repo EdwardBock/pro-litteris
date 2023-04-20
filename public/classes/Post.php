@@ -139,6 +139,7 @@ class Post extends _Component {
 		$litterisFirstName = $this->plugin->user->getProLitterisName( $user_id );
 		$litterisLastName  = $this->plugin->user->getProLitterisSurname( $user_id );
 		$user              = get_user_by( "ID", $user_id );
+		if(!($user instanceof \WP_User)) return false;
 		$firstName         = ( ! empty( $litterisFirstName ) ) ? $litterisFirstName : $user->first_name;
 		$lastName          = ( ! empty( $litterisLastName ) ) ? $litterisLastName : $user->last_name;
 
