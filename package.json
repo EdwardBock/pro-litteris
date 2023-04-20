@@ -2,22 +2,21 @@
   "name": "pro-litteris",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "wp-scripts start src/scripts/gutenberg.js --output-path=public/dist",
     "build": "wp-scripts build src/scripts/gutenberg.js --output-path=public/dist",
     "packages-update": "wp-scripts packages-update",
     "install-legacy": "npm i install --legacy-peer-deps"
   },
   "dependencies": {
-    "@wordpress/components": "^23.3.0",
-    "@wordpress/data": "^8.3.0",
-    "@wordpress/dom-ready": "^3.26.0",
-    "@wordpress/edit-post": "^7.3.0",
-    "@wordpress/editor": "^13.3.0",
-    "@wordpress/element": "^5.3.0",
-    "@wordpress/plugins": "^5.3.0",
-    "@wordpress/scripts": "^25.3.0",
+    "@wordpress/components": "^23.8.0",
+    "@wordpress/data": "^9.1.0",
+    "@wordpress/dom-ready": "^3.31.0",
+    "@wordpress/edit-post": "^7.8.0",
+    "@wordpress/editor": "^13.8.0",
+    "@wordpress/element": "^5.8.0",
+    "@wordpress/plugins": "^5.8.0",
+    "@wordpress/scripts": "^26.2.0",
     "install": "^0.13.0",
-    "swr": "^2.0.3"
+    "swr": "^2.1.3"
   }
 }
