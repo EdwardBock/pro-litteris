@@ -81,7 +81,7 @@ class Post extends _Component {
 			$blocks = parse_blocks( $post_object->post_content );
 			$ids = [];
 			foreach ($blocks as $block){
-				if ( $block['blockName'] === 'core/image' ) {
+				if ( $block['blockName'] === 'core/image' && isset($block["attrs"]["id"]) ) {
 					$ids[] = $block["attrs"]["id"];
 				} else if ($block['blockName'] === 'core/gallery') {
 					if(isset($block["attrs"]["ids"] ) && is_array($block["attrs"]["ids"] )){
