@@ -3,7 +3,7 @@
 /**
  * Plugin Name: ProLitteris
  * Description: Integration of prolitteris.ch services.
- * Version: 1.3.2
+ * Version: 1.4.0
  * Author: Palasthotel <rezeption@palasthotel.de> (Edward Bock)
  * Author URI: https://palasthotel.de
  * Text Domain: pro-litteris
@@ -13,7 +13,6 @@
 namespace Palasthotel\ProLitteris;
 
 // If this file is called directly, abort.
-use Palasthotel\ProcessLog\Component\Component;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
