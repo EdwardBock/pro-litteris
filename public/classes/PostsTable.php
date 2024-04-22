@@ -42,27 +42,24 @@ class PostsTable extends _Component {
 	public function custom_columns($column, $post_id){
 		if($column == 'pro-litteris'){
 
-			$pixel = $this->plugin->repository->getPostPixel($post_id);
-
-			if($pixel instanceof Pixel && $this->plugin->database->isMessageReported($pixel->uid)){
-				echo "<span title='Inhalt wurde bei ProLitteris gemeldet' style='cursor: help;'>✅</span>";
-				return;
-			}
-
-			if(!$this->plugin->post->needsPixel($post_id)){
-				echo "<span title='Es wird kein Pixel benötigt, weil der Text unter ".Options::getMinCharCount()." Zeichen hat.' style='cursor: help;'>⚪️</span>";
-				return;
-			}
+			$pixel = $this->plugin->repository->getPostPixel($post_id, true);
 
 			if( $pixel instanceof \WP_Error ){
 				$error = $pixel->get_error_message();
 				echo "<span title='$error' style='cursor: help;'>🔴</span>";
 				return;
-			}
+			} else if($pixel instanceof Pixel){
 
-			if( $pixel instanceof Pixel){
-				echo "<span title='Inhalt ist bereit für die Meldung bei ProLitteris' style='cursor: help;'>🔶</span>";
-				return;
+				if(!$this->plugin->post->canBeReported($post_id)){
+					echo "<span title='Kann nicht gemeldet werden, weil der Text unter ".Options::getMinCharCount()." Zeichen hat.' style='cursor: help;'>⚪️</span>";
+					return;
+				} else if($this->plugin->database->isMessageReported($pixel->uid)){
+					echo "<span title='Inhalt wurde bei ProLitteris gemeldet' style='cursor: help;'>✅</span>";
+					return;
+				} else {
+					echo "<span title='Inhalt ist bereit für die Meldung bei ProLitteris' style='cursor: help;'>🔶</span>";
+					return;
+				}
 			}
 
 			echo "<span title='Noch kein Zählpixel bei ProLitteris abgeholt' style='cursor: help;'>🔵</span>";

@@ -3,6 +3,7 @@
 namespace Palasthotel\ProLitteris;
 
 use Html2Text\Html2Text;
+use Palasthotel\ProLitteris\Model\Pixel;
 use WP_Error;
 
 /**
@@ -46,7 +47,7 @@ class Post extends _Component {
 	 *
 	 * @return bool
 	 */
-	public function needsPixel( $post_id = null, $text = null ) {
+	public function canBeReported($post_id = null, $text = null ) {
 		$text = ( $text == null ) ? $this->getPostText( $post_id ) : $text;
 
 		return strlen( $text ) >= Options::getMinCharCount();
@@ -58,6 +59,15 @@ class Post extends _Component {
 	 * @return array|WP_Error
 	 */
 	public function getPostMessage( $post_id ) {
+
+		$pixel = $this->plugin->repository->getPostPixel( $post_id );
+
+		if( !($pixel instanceof Pixel) ){
+			return new WP_Error(
+				Plugin::ERROR_CODE_PUSH_MESSAGE,
+				"No valid pixel."
+			);
+		}
 
 		$authorIds = apply_filters(
 			Plugin::FILTER_POST_AUTHORS,
@@ -120,8 +130,6 @@ class Post extends _Component {
 				"No valid participants."
 			);
 		}
-
-		$pixel = $this->plugin->repository->getPostPixel( $post_id );
 
 		$title = get_the_title( $post_id );
 		$text  = $this->getPostText( $post_id );

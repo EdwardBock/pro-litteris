@@ -31,10 +31,6 @@ class WP_REST extends _Component {
 					$response = new \stdClass();
 
 					$text = $this->plugin->post->getPostText($postId);
-					if ( ! $this->plugin->post->needsPixel( $postId, $text ) ) {
-						$response->info = "Zählpixel werden erst ab " . Options::getMinCharCount() . " Zeichen abgerufen. Dieser Text zählt " . strlen( $text ) . " Zeichen. Speichern zum aktualisieren.";
-						return $response;
-					}
 
 					$pixel = $this->plugin->repository->getPostPixel( $postId, true );
 					if ( $pixel instanceof WP_Error ) {
