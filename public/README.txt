@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: utils
 Requires at least: 5.0
 Tested up to: 6.5.2
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -28,6 +28,9 @@ Integrate ProLitteris into your wordpress.
 
 
 == Changelog ==
+
+= 1.5.0 =
+* Feature: Post reporting updatable
 
 = 1.4.0 =
 * Feature: Always add pixels, but limit reporting if conditions are not met
