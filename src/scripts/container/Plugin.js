@@ -165,6 +165,13 @@ const Message = ({message = {}, draft = {}, pushError, onSubmitReport})=>{
             <>
                 <p className="description">{dateFormat(parseInt(message.reported)*1000)}.</p>
                 <p>Meldung war erfolgreich 🎉</p>
+                <Button
+                    disabled={isDirtyState || isSaving}
+                    isSecondary
+                    title="Bitte speichern vor dem Melden."
+                    onClick={onSubmitReport}
+                >Meldung aktualsieren</Button>
+                <p className="description">Ausschließlich Autoren können aktualisiert werden.</p>
             </>
             :
             <Button

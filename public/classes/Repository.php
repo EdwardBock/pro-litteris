@@ -129,14 +129,6 @@ class Repository extends _Component {
 			);
 		}
 
-		$isAlreadyReported = $this->database->isMessageReported( $pixel->uid );
-		if ( $isAlreadyReported ) {
-			return new WP_Error(
-				Plugin::ERROR_CODE_PUSH_MESSAGE,
-				"Pixel seems to be already reported: $pixel->uid"
-			);
-		}
-
 		$message = $this->plugin->post->getPostMessage( $post_id );
 
 		if ( $message instanceof WP_Error ) {
