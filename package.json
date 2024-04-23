@@ -8,15 +8,15 @@
     "install-legacy": "npm i install --legacy-peer-deps"
   },
   "dependencies": {
-    "@wordpress/components": "^23.8.0",
-    "@wordpress/data": "^9.1.0",
-    "@wordpress/dom-ready": "^3.31.0",
-    "@wordpress/edit-post": "^7.8.0",
-    "@wordpress/editor": "^13.8.0",
-    "@wordpress/element": "^5.8.0",
-    "@wordpress/plugins": "^5.8.0",
-    "@wordpress/scripts": "^26.2.0",
+    "@wordpress/components": "^27.4.0",
+    "@wordpress/data": "^9.26.0",
+    "@wordpress/dom-ready": "^3.56.0",
+    "@wordpress/edit-post": "^7.33.0",
+    "@wordpress/editor": "^13.33.0",
+    "@wordpress/element": "^5.33.0",
+    "@wordpress/plugins": "^6.24.0",
+    "@wordpress/scripts": "^27.7.0",
     "install": "^0.13.0",
-    "swr": "^2.1.3"
+    "swr": "^2.2.5"
   }
 }
