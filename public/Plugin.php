@@ -73,6 +73,7 @@ class Plugin extends Components\Plugin {
 	const FILTER_POST_AUTHORS = "pro_litteris_post_authors";
 	const FILTER_POST_TYPES = "pro_litteris_post_types";
 	const FILTER_RENDER_PIXEL = "pro_litteris_render_pixel";
+	const FILTER_POST_HAS_PAYWALL = "pro_litteris_post_has_paywall";
 
 	/**
 	 * Options
